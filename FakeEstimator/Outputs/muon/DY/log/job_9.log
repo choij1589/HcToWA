@@ -1,0 +1,51 @@
+000 (2117004.009.000) 06/02 02:18:35 Job submitted from host: <172.30.1.200:9618?addrs=172.30.1.200-9618+[--1]-9618&noUDP&sock=203143_c79e_3>
+...
+001 (2117004.009.000) 06/02 02:18:42 Job executing on host: <172.30.1.207:9618?addrs=172.30.1.207-9618+[--1]-9618&noUDP&sock=6818_28cd_3>
+...
+006 (2117004.009.000) 06/02 02:18:51 Image size of job updated: 166264
+	26  -  MemoryUsage of job (MB)
+	25984  -  ResidentSetSize of job (KB)
+...
+006 (2117004.009.000) 06/02 02:23:52 Image size of job updated: 1063180
+	432  -  MemoryUsage of job (MB)
+	441848  -  ResidentSetSize of job (KB)
+...
+006 (2117004.009.000) 06/02 02:38:53 Image size of job updated: 1063180
+	433  -  MemoryUsage of job (MB)
+	443272  -  ResidentSetSize of job (KB)
+...
+006 (2117004.009.000) 06/02 02:58:55 Image size of job updated: 1063180
+	434  -  MemoryUsage of job (MB)
+	443516  -  ResidentSetSize of job (KB)
+...
+006 (2117004.009.000) 06/02 03:08:56 Image size of job updated: 1063180
+	435  -  MemoryUsage of job (MB)
+	444940  -  ResidentSetSize of job (KB)
+...
+006 (2117004.009.000) 06/02 03:13:57 Image size of job updated: 1063180
+	439  -  MemoryUsage of job (MB)
+	448704  -  ResidentSetSize of job (KB)
+...
+006 (2117004.009.000) 06/02 03:18:57 Image size of job updated: 1063180
+	439  -  MemoryUsage of job (MB)
+	448740  -  ResidentSetSize of job (KB)
+...
+006 (2117004.009.000) 06/02 03:23:57 Image size of job updated: 1063180
+	439  -  MemoryUsage of job (MB)
+	448748  -  ResidentSetSize of job (KB)
+...
+005 (2117004.009.000) 06/02 09:04:49 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 06:45:18, Sys 0 00:00:25  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 06:45:18, Sys 0 00:00:25  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	1965388  -  Run Bytes Sent By Job
+	225  -  Run Bytes Received By Job
+	1965388  -  Total Bytes Sent By Job
+	225  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated
+	   Cpus                 :                 1         1
+	   Disk (KB)            :     1931  2048000   2391884
+	   Memory (MB)          :      439     2000      2000
+...

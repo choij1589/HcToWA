@@ -1,0 +1,26 @@
+#!/bin/sh
+python MakeCSV.py --sample DATA --channel 3Mu &
+python MakeCSV.py --sample DY --channel 3Mu &
+python MakeCSV.py --sample ZG --channel 3Mu &
+python MakeCSV.py --sample ttX --channel 3Mu &
+python MakeCSV.py --sample rare --channel 3Mu &
+python MakeCSV.py --sample VV --channel 3Mu &
+python MakeCSV.py --sample fake --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc70_MA15 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc70_MA40 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc70_MA65 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc100_MA15 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc100_MA25 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc100_MA60 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc100_MA95 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc130_MA15 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc130_MA45 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc130_MA55 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc130_MA90 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc130_MA125 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc160_MA15 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc160_MA45 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc160_MA75 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc160_MA85 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc160_MA120 --channel 3Mu &
+python MakeCSV.py --sample TTToHcToWA_AToMuMu_MHc160_MA155 --channel 3Mu &

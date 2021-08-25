@@ -1,0 +1,5 @@
+{
+  "python.pythonPath": "/root/anaconda3/envs/torch/bin/python",
+  "python.linting.enabled": false,
+  "python.formatting.provider": "yapf"
+}
