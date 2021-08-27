@@ -3,3 +3,6 @@
 *.csv
 job.*
 *.jdl
+*.pt
+*.sub
+*/condor_base/*
