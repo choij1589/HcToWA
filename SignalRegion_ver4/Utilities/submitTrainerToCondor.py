@@ -13,6 +13,7 @@ MassPoints = {70: [15, 40, 65],
               130: [15, 45, 55, 90, 125],
               160: [15, 45, 75, 85, 120, 155]}
 
+MassPoints = {70: [15]}
 os.chdir(f"condor_base/train/{CHANNEL}/{TARGET}")
 for MHc in MassPoints.keys():
     for MA in MassPoints[MHc]:

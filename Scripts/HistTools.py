@@ -7,7 +7,6 @@ class HistTool():
         self.hists = dict()
         self.dirs = dict()
         self.outfile = TFile(outfile, "recreate")
-        self.tree = TTree("Events", "Events")
         self.outfile_name = outfile
 
     def fill_hist(self, histkey, value, weight, n_bin, x_min, x_max):
@@ -138,7 +137,4 @@ class HistTool():
                 mother.cd(subdir)
             # now write histogram
             hist.Write()
-        self.outfile.cd()
-        self.tree.Write()
-
         self.outfile.Close()
