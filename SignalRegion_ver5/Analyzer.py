@@ -358,7 +358,7 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
         htool.fill_hist(f"fake/{REGION}/Central/mMuMu", diMuon.Mass(), w_fake,
                         3000, 0., 300.)
         htool.fill_hist(f"fake/{REGION}/Central/MT", MT, w_fake, 300, 0., 300.)
-        htool.fill_object(f"fake/{REGION}/Central/DiMuon", diMuon, w_fake)
+        htool.fill_object(f"fake/{REGION}/Central/diMuon", diMuon, w_fake)
         htool.fill_object(f"fake/{REGION}/Central/METv", METv, w_fake)
         htool.fill_muons(f"fake/{REGION}/Central/muons", muons, w_fake)
         htool.fill_electrons(f"fake/{REGION}/Central/electrons", electrons,
@@ -437,7 +437,7 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
         htool.fill_hist(f"fake/{REGION}/Up/mMuMu", diMuon.Mass(), w_fake_up,
                         3000, 0., 300.)
         htool.fill_hist(f"fake/{REGION}/Up/MT", MT, w_fake_up, 300, 0., 300.)
-        htool.fill_object(f"fake/{REGION}/Up/DiMuon", diMuon, w_fake_up)
+        htool.fill_object(f"fake/{REGION}/Up/diMuon", diMuon, w_fake_up)
         htool.fill_object(f"fake/{REGION}/Up/METv", METv, w_fake_up)
         htool.fill_muons(f"fake/{REGION}/Up/muons", muons, w_fake_up)
         htool.fill_electrons(f"fake/{REGION}/Up/electrons", electrons,
@@ -516,7 +516,7 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
                         w_fake_down, 3000, 0., 300.)
         htool.fill_hist(f"fake/{REGION}/Down/MT", MT, w_fake_down, 300, 0.,
                         300.)
-        htool.fill_object(f"fake/{REGION}/Down/DiMuon", diMuon, w_fake_down)
+        htool.fill_object(f"fake/{REGION}/Down/diMuon", diMuon, w_fake_down)
         htool.fill_object(f"fake/{REGION}/Down/METv", METv, w_fake_down)
         htool.fill_muons(f"fake/{REGION}/Down/muons", muons, w_fake_down)
         htool.fill_electrons(f"fake/{REGION}/Down/electrons", electrons,
@@ -621,6 +621,8 @@ def main():
                     continue
 
                 loop(evt, clfs_fake, clfs_ttX, syst, htool)
+        f.Close()
+
     elif SAMPLE == "DATA" and args.channel == "3Mu":
         fkey = f"{SAMPLE_DIR}/DATA/Selector_DoubleMuon.root"
         f = TFile.Open(fkey)
