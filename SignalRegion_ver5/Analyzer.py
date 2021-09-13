@@ -1,3 +1,4 @@
+import os
 import argparse
 import numpy as np
 import pandas as pd
@@ -19,25 +20,25 @@ from SignalTools import get_weight, get_fake_weights
 parser = argparse.ArgumentParser()
 parser.add_argument("--sample", "-s", default=None, required=True, type=str, help="sample name")
 parser.add_argument("--channel", "-c", default=None, required=True, type=str, help="channel")
+parser.add_argument("--mass", "-m", default=None, required=True, type=str, help="signal mass point")
 args = parser.parse_args()
 
-# define global variables
+# Define global variables
 CHANNEL = args.channel
 SAMPLE = args.sample
-MASS_POINTs = [
-    "MHc70_MA15", "MHc70_MA40", "MHc70_MA65",
-    "MHc100_MA15", "MHc100_MA25", "MHc100_MA60", "MHc100_MA95",
-    "MHc130_MA15", "MHc130_MA45", "MHc130_MA55", "MHc130_MA90", "MHc130_MA125",
-    "MHc160_MA15", "MHc160_MA45", "MHc160_MA75", "MHc160_MA85", "MHc160_MA120", "MHc160_MA155"
-]
+MASS_POINT = args.mass
 set_global(CHANNEL, SAMPLE)
+
+# check output directory
+if not os.path.exists(f"Outputs/{CHANNEL}/{MASS_POINT}/ROOT"):
+	os.makedirs(f"Outputs/{CHANNEL}/{MASS_POINT}/ROOT")
 
 if CHANNEL == "1E2Mu":
     DATA = ["MuonEG", "DoubleMuon"]
     BKGs = ["rare", "ttX", "VV", "fake", "conv"]
     MCs = ["DY", "ZG", "rare", "ttX", "VV"]
     SAMPLE_DIR = "../Samples/Selector/2017/Skim1E2Mu__/"
-    OUTFILE = f"Outputs/{CHANNEL}/ROOT/{SAMPLE}.root"
+    OUTFILE = f"Outputs/{CHANNEL}/{MASS_POINT}/ROOT/{SAMPLE}.root"
     features = [
         'mu1_px', 'mu1_py', 'mu1_pz', 'mu1_mass', 'mu1_charge', 'mu2_px',
         'mu2_py', 'mu2_pz', 'mu2_mass', 'mu2_charge', 'ele_px', 'ele_py',
@@ -52,7 +53,7 @@ elif CHANNEL == "3Mu":
     BKGs = ["rare", "ttX", "VV", "fake", "conv"]
     MCs = ["DY", "ZG", "rare", "ttX", "VV"]
     SAMPLE_DIR = "../Samples/Selector/2017/Skim3Mu__/"
-    OUTFILE = f"Outputs/{CHANNEL}/ROOT/{SAMPLE}.root"
+    OUTFILE = f"Outputs/{CHANNEL}/{MASS_POINT}/ROOT/{SAMPLE}.root"
     features = [
         'mu1_px', 'mu1_py', 'mu1_pz', 'mu1_mass', 'mu1_charge', 'mu2_px',
         'mu2_py', 'mu2_pz', 'mu2_mass', 'mu2_charge', 'mu3_px', 'mu3_py',
@@ -70,43 +71,44 @@ SYSTs = ["Central"]
 WEIGHTSYSTs = []
 htool = HistTool(outfile=OUTFILE)
 
-# load scaler
-scalers_fake = dict()
-scalers_ttX = dict()
-for mass_point in MASS_POINTs:
-    scalers_fake[mass_point] = pickle.load(open(f"Outputs/{CHANNEL}/{mass_point}/models/scaler_fake.pkl", 'rb'))
-    scalers_ttX[mass_point] = pickle.load(open(f"Outputs/{CHANNEL}/{mass_point}/models/scaler_ttX.pkl", 'rb'))
+# load scalers
+scaler_fake = pickle.load(
+    open(f"Outputs/{CHANNEL}/{MASS_POINT}/models/scaler_fake.pkl", 'rb')
+)
+scaler_ttX = pickle.load(
+    open(f"Outputs/{CHANNEL}/{MASS_POINT}/models/scaler_ttX.pkl", 'rb')
+)
 
 # load classifiers
-# all the hyperparameters for each mass point have been optimized using grid search
-# the values are stored in Outputs/{CHANNEL}/CSV/hyper_params.csv
+# all hyperparameters for each mass point have been optimized 
+# using the grid search technique
+# The values are stored in Outputs/{CHANNEL}/CSV/hyper_params.csv
+# TODO: you should also optimize the discriminator for
+# kernel initialization & activation functions also
 from MLTools import SelfNormDNN
+hyper_params = pd.read_csv(
+        f"Outputs/{CHANNEL}/CSV/hyper_params.csv", index_col="mass_point"
+)
+lr_fake, n_hidden_fake = hyper_params.loc[MASS_POINT, 'lr_fake'], hyper_params.loc[MASS_POINT, "n_hidden_fake"]
+clf_fake = SelfNormDNN(len(features), 2, n_hidden_fake)
+clf_fake.load_state_dict(
+    torch.load(
+        f"Outputs/{CHANNEL}/{MASS_POINT}/models/chkpoint_sig_vs_fake_lr-{lr_fake}_n_hidden-{n_hidden_fake}.pt",
+        map_location=torch.device('cpu')
+    )
+)
+clf_fake.eval()
 
-hyper_params = pd.read_csv(f"Outputs/{CHANNEL}/CSV/hyper_params.csv", index_col="mass_point")
-clfs_fake = dict()
-clfs_ttX = dict()
-for mass_point in MASS_POINTs:
-    lr_fake, n_hidden_fake = hyper_params.loc[mass_point, 'lr_fake'], hyper_params.loc[mass_point, 'n_hidden_fake']
-    lr_ttX, n_hidden_ttX = hyper_params.loc[mass_point, 'lr_ttX'], hyper_params.loc[mass_point, 'n_hidden_ttX']
-    clf_fake = SelfNormDNN(len(features), 2, n_hidden_fake)
-    clf_ttX = SelfNormDNN(len(features), 2, n_hidden_ttX)
-    clf_fake.load_state_dict(
-        torch.load(
-            f"Outputs/{CHANNEL}/{mass_point}/models/chkpoint_sig_vs_fake_lr-{lr_fake}_n_hidden-{n_hidden_fake}.pt",
-		map_location=torch.device('cpu')
-        )
+lr_ttX, n_hidden_ttX = hyper_params.loc[MASS_POINT, 'lr_ttX'], hyper_params.loc[MASS_POINT, 'n_hidden_ttX']
+clf_ttX = SelfNormDNN(len(features), 2, n_hidden_ttX)
+clf_ttX.load_state_dict(
+    torch.load(
+        f"Outputs/{CHANNEL}/{MASS_POINT}/models/chkpoint_sig_vs_ttX_lr-{lr_ttX}_n_hidden-{n_hidden_ttX}.pt",
+        map_location=torch.device('cpu')
     )
-    clf_ttX.load_state_dict(
-        torch.load(
-            f"Outputs/{CHANNEL}/{mass_point}/models/chkpoint_sig_vs_ttX_lr-{lr_ttX}_n_hidden-{n_hidden_ttX}.pt",
-		map_location=torch.device('cpu')
-        )
-    )
-    clf_fake.eval()
-    clf_ttX.eval()
-    clfs_fake[mass_point] = clf_fake
-    clfs_ttX[mass_point] = clf_ttX
-    
+)
+clf_ttX.eval()
+
 # helper functions
 def get_os_pairs(muons):
     # expect the muon pairs are not all the same sign
@@ -123,7 +125,6 @@ def get_os_pairs(muons):
     
     return (pair1, pair2)
 
-# Selection
 def select(evt, muons, electrons, jets, bjets, METv):
     """Event selection on trilep regions"""
     if CHANNEL == "1E2Mu":
@@ -209,6 +210,7 @@ def select(evt, muons, electrons, jets, bjets, METv):
         print(f"Wrong channel {CHANNEL}")
         raise(AttributeError)
     
+# loop over events, fill histograms
 def loop(evt, clfs_fake, clfs_ttX, syst, htool):
     muons, electrons = get_leptons(evt)
     leptons = muons + electrons
@@ -368,32 +370,22 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
     else:
         raise (AttributeError)
     
-    scores_fake = dict()
-    scores_ttX = dict()
-    
-    for mass_point in MASS_POINTs:
-        clf_fake, scaler_fake = clfs_fake[mass_point], scalers_fake[mass_point]
-        clf_ttX, scaler_ttX = clfs_ttX[mass_point], scalers_ttX[mass_point]
-        
-        score_fake = clf_fake(torch.FloatTensor(
-            scaler_fake.transform(features))).view(2)[0].detach().numpy()
-        score_ttX = clf_ttX(torch.FloatTensor(
-            scaler_ttX.transform(features))).view(2)[0].detach().numpy()
-        
-        scores_fake[mass_point] = score_fake
-        scores_ttX[mass_point] = score_ttX
+    score_fake = clf_fake(torch.FloatTensor(
+        scaler_fake.transform(features))).view(2)[0].detach().numpy()
+    score_ttX = clf_ttX(torch.FloatTensor(
+        scaler_ttX.transform(features))).view(2)[0].detach().numpy()
 
-    # now fill histograms
+    # Now fill histograms
     if CHANNEL == "1E2Mu":
         if tight_flag:
-            weight = 1.
-            if not evt.IsDATA:
-                weight = get_weight(evt, syst)
             if SAMPLE in ["DY", "ZG"] and not prompt_flag:
                 return
-
+            
+            weight = 1. if evt.IsDATA else get_weight(evt, syst)
+            
             input_path = f"{SAMPLE}/object/{REGION}/{syst}"
             htool.fill_object(f"{input_path}/METv", METv, weight)
+            htool.fill_object(f"{input_path}/diMuon", diMuon, weight)
             htool.fill_muons(f"{input_path}/muons", muons, weight)
             htool.fill_electrons(f"{input_path}/electrons", electrons, weight)
             htool.fill_jets(f"{input_path}/jets", jets, weight)
@@ -438,21 +430,23 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             htool.fill_hist(f"{input_path}/MET", METv.Pt(), weight, 1000, 0., 1000.)
             htool.fill_hist(f"{input_path}/avg_dRjets", avg_dRjets, weight, 100, 0., 10.)
             htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, weight, 100, 0., 1.)
-            for mass_point in MASS_POINTs:
-                input_path = f"{SAMPLE}/{mass_point}/{REGION}/{syst}"
-                score_fake, score_ttX = scores_fake[mass_point], scores_ttX[mass_point]
-                htool.fill_hist(f"{input_path}/mMM", diMuon.Mass(), weight, 3000, 0., 300.)
-                htool.fill_hist(f"{input_path}/score_fake", score_fake, weight, 100, 0., 1.)
-                htool.fill_hist(f"{input_path}/score_ttX", score_ttX, weight, 100, 0., 1.)
-                htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, diMuon.Mass(), weight,
-                                    100, 0., 1., 100, 0., 1., 3000, 0., 300.)
+            
+            # fill mass dependent observables
+            input_path = f"{SAMPLE}/{MASS_POINT}/{REGION}/{syst}"
+            htool.fill_hist(f"{input_path}/mMM", diMuon.Mass(), weight, 3000, 0., 300.)
+            htool.fill_hist(f"{input_path}/score_fake", score_fake, weight, 100, 0., 1.)
+            htool.fill_hist(f"{input_path}/score_ttX", score_ttX, weight, 100, 0., 1.)
+            htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, diMuon.Mass(), weight,
+                                100, 0., 1., 100, 0., 1., 3000, 0., 300.)
         else:
+            # estimate fake contribution
             if (not evt.IsDATA) or (not syst == "Central"):
                 return
-            # estimate fake contribution
             w_fake, w_fake_up, w_fake_down = get_fake_weights(muons, electrons)
+            
             input_path = f"fake/object/{REGION}/Central"
             htool.fill_object(f"{input_path}/METv", METv, w_fake)
+            htool.fill_object(f"{input_path}/diMuon", diMuon, w_fake)
             htool.fill_muons(f"{input_path}/muons", muons, w_fake)
             htool.fill_electrons(f"{input_path}/electrons", electrons, w_fake)
             htool.fill_jets(f"{input_path}/jets", jets, w_fake)
@@ -494,17 +488,17 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             htool.fill_hist(f"{input_path}/MET", METv.Pt(), w_fake, 1000, 0., 1000.)
             htool.fill_hist(f"{input_path}/avg_dRjets", avg_dRjets, w_fake, 100, 0., 10.)
             htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, w_fake, 100, 0., 1.)
-            for mass_point in MASS_POINTs:
-                input_path = f"fake/{mass_point}/{REGION}/Central"
-                score_fake, score_ttX = scores_fake[mass_point], scores_ttX[mass_point]
-                htool.fill_hist(f"{input_path}/mMM", diMuon.Mass(), w_fake, 3000, 0., 300.)
-                htool.fill_hist(f"{input_path}/score_fake", score_fake, w_fake, 100, 0., 1.)
-                htool.fill_hist(f"{input_path}/score_ttX", score_ttX, w_fake, 100, 0., 1.)
-                htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, diMuon.Mass(), w_fake,
-                                    100, 0., 1., 100, 0., 1., 3000, 0., 300.)
+            
+            input_path = f"fake/{MASS_POINT}/{REGION}/Central"
+            htool.fill_hist(f"{input_path}/mMM", diMuon.Mass(), w_fake, 3000, 0., 300.)
+            htool.fill_hist(f"{input_path}/score_fake", score_fake, w_fake, 100, 0., 1.)
+            htool.fill_hist(f"{input_path}/score_ttX", score_ttX, w_fake, 100, 0., 1.)
+            htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, diMuon.Mass(), w_fake,
+                                100, 0., 1., 100, 0., 1., 3000, 0., 300.)
                 
             input_path = f"fake/object/{REGION}/Up"
             htool.fill_object(f"{input_path}/METv", METv, w_fake_up)
+            htool.fill_object(f"{input_path}/diMuon", diMuon, w_fake_up)
             htool.fill_muons(f"{input_path}/muons", muons, w_fake_up)
             htool.fill_electrons(f"{input_path}/electrons", electrons, w_fake_up)
             htool.fill_jets(f"{input_path}/jets", jets, w_fake_up)
@@ -546,17 +540,17 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             htool.fill_hist(f"{input_path}/MET", METv.Pt(), w_fake_up, 1000, 0., 1000.)
             htool.fill_hist(f"{input_path}/avg_dRjets", avg_dRjets, w_fake_up, 100, 0., 10.)
             htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, w_fake_up, 100, 0., 1.)
-            for mass_point in MASS_POINTs:
-                input_path = f"fake/{mass_point}/{REGION}/Up"
-                score_fake, score_ttX = scores_fake[mass_point], scores_ttX[mass_point]
-                htool.fill_hist(f"{input_path}/mMM", diMuon.Mass(), w_fake_up, 3000, 0., 300.)
-                htool.fill_hist(f"{input_path}/score_fake", score_fake, w_fake_up, 100, 0., 1.)
-                htool.fill_hist(f"{input_path}/score_ttX", score_ttX, w_fake_up, 100, 0., 1.)
-                htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, diMuon.Mass(), w_fake_up,
-                                    100, 0., 1., 100, 0., 1., 3000, 0., 300.) 
+                
+            input_path = f"fake/{MASS_POINT}/{REGION}/Up"
+            htool.fill_hist(f"{input_path}/mMM", diMuon.Mass(), w_fake_up, 3000, 0., 300.)
+            htool.fill_hist(f"{input_path}/score_fake", score_fake, w_fake_up, 100, 0., 1.)
+            htool.fill_hist(f"{input_path}/score_ttX", score_ttX, w_fake_up, 100, 0., 1.)
+            htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, diMuon.Mass(), w_fake_up,
+                                100, 0., 1., 100, 0., 1., 3000, 0., 300.) 
                 
             input_path = f"fake/object/{REGION}/Down"
             htool.fill_object(f"{input_path}/METv", METv, w_fake_down)
+            htool.fill_object(f"{input_path}/diMuon", diMuon, w_fake_down)
             htool.fill_muons(f"{input_path}/muons", muons, w_fake_down)
             htool.fill_electrons(f"{input_path}/electrons", electrons, w_fake_down)
             htool.fill_jets(f"{input_path}/jets", jets, w_fake_down)
@@ -598,23 +592,20 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             htool.fill_hist(f"{input_path}/MET", METv.Pt(), w_fake_down, 1000, 0., 1000.)
             htool.fill_hist(f"{input_path}/avg_dRjets", avg_dRjets, w_fake_down, 100, 0., 10.)
             htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, w_fake_down, 100, 0., 1.)
-            for mass_point in MASS_POINTs:
-                input_path = f"fake/{mass_point}/{REGION}/Down"
-                score_fake, score_ttX = scores_fake[mass_point], scores_ttX[mass_point]
-                htool.fill_hist(f"{input_path}/mMM", diMuon.Mass(), w_fake_down, 3000, 0., 300.)
-                htool.fill_hist(f"{input_path}/score_fake", score_fake, w_fake_down, 100, 0., 1.)
-                htool.fill_hist(f"{input_path}/score_ttX", score_ttX, w_fake_down, 100, 0., 1.)
-                htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, diMuon.Mass(), w_fake_down,
-                                    100, 0., 1., 100, 0., 1., 3000, 0., 300.)
-                
+            
+            input_path = f"fake/{MASS_POINT}/{REGION}/Down"
+            htool.fill_hist(f"{input_path}/mMM", diMuon.Mass(), w_fake_down, 3000, 0., 300.)
+            htool.fill_hist(f"{input_path}/score_fake", score_fake, w_fake_down, 100, 0., 1.)
+            htool.fill_hist(f"{input_path}/score_ttX", score_ttX, w_fake_down, 100, 0., 1.)
+            htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, diMuon.Mass(), w_fake_down,
+                                100, 0., 1., 100, 0., 1., 3000, 0., 300.)
+        
     elif CHANNEL == "3Mu":
         if tight_flag:
-            weight = 1.
-            if not evt.IsDATA:
-                weight = get_weight(evt, syst)
             if SAMPLE in ["DY", "ZG"] and not prompt_flag:
                 return
-
+            weight = 1. if evt.IsDATA else get_weight(evt, syst)     
+            
             # os pairs will be filled after matching
             input_path = f"{SAMPLE}/objects/{REGION}/{syst}"
             htool.fill_object(f"{input_path}/METv", METv, weight)
@@ -668,39 +659,37 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, weight, 100, 0., 10.)
             
             # variables with mass point dependence
-            for mass_point in MASS_POINTs:
-                input_path = f"{SAMPLE}/{mass_point}/{REGION}/{syst}"
-                score_fake, score_ttX = scores_fake[mass_point], scores_ttX[mass_point]
-                mA = float(mass_point.split("_")[1][2:])
+            input_path = f"{SAMPLE}/{MASS_POINT}/{REGION}/{syst}"
+            mA = float(MASS_POINT.split("_")[1][2:])
             
-                htool.fill_hist(f"{input_path}/score_fake", score_fake, weight, 100, 0., 1.)
-                htool.fill_hist(f"{input_path}/score_ttX", score_ttX, weight, 100, 0., 1.)
-                if REGION == "ZFake":
-                    # make Z candidate
-                    if abs(ospair1.Mass() - 91.2) < abs(ospair2.Mass() - 91.2):
-                        ZCand, nZCand = ospair1, ospair2
-                    else:
-                        ZCand, nZCand = ospair2, ospair1
-                    htool.fill_object(f"{input_path}/ZCand", ZCand, weight)
-                    htool.fill_object(f"{input_path}/nZCand", nZCand, weight)
-                elif REGION == "SR":
-                    # make A candidate
-                    if abs(ospair1.Mass() - mA) < abs(ospair2.Mass() - mA):
-                        Acand, nAcand = ospair1, ospair2
-                    else:
-                        Acand, nAcand = ospair2, ospair1
-                    htool.fill_object(f"{input_path}/Acand", Acand, weight)
-                    htool.fill_object(f"{input_path}/nAcand", nAcand, weight)
-                    htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, Acand.Mass(), weight,
-                                      100, 0., 1., 100, 0., 1., 3000, 0., 300.)                    
-                    # matching ACand in Signal Samples
-                    # need update
-                    if "TTToHcToWA" in SAMPLE:
-                        AGen = Particle(evt.A_pt, evt.A_eta, evt.A_phi, evt.A_mass)
-                        dRAAcand, dRAnAcand = AGen.DeltaR(Acand), AGen.DeltaR(nAcand)
-                        htool.fill_hist(f"{input_path}/dRAAcand", dRAAcand, weight, 100, 0., 10.)
-                        htool.fill_hist(f"{input_path}/dRAnAcand", dRAnAcand, weight, 100, 0., 10.)
-        # fake
+            htool.fill_hist(f"{input_path}/score_fake", score_fake, weight, 100, 0., 1.)
+            htool.fill_hist(f"{input_path}/score_ttX", score_ttX, weight, 100, 0., 1.)
+            if REGION == "ZFake":
+                # make Z candidate
+                if abs(ospair1.Mass() - 91.2) < abs(ospair2.Mass() - 91.2):
+                    ZCand, nZCand = ospair1, ospair2
+                else:
+                    ZCand, nZCand = ospair2, ospair1
+                htool.fill_object(f"{input_path}/ZCand", ZCand, weight)
+                htool.fill_object(f"{input_path}/nZCand", nZCand, weight)
+            elif REGION == "SR":
+                # make A candidate
+                if abs(ospair1.Mass() - mA) < abs(ospair2.Mass() - mA):
+                    Acand, nAcand = ospair1, ospair2
+                else:
+                    Acand, nAcand = ospair2, ospair1
+                htool.fill_object(f"{input_path}/Acand", Acand, weight)
+                htool.fill_object(f"{input_path}/nAcand", nAcand, weight)
+                htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, Acand.Mass(), weight,
+                                    100, 0., 1., 100, 0., 1., 3000, 0., 300.)                    
+                # matching ACand in Signal Samples
+                if "TTToHcToWA" in SAMPLE:
+                    AGen = Particle(evt.A_pt, evt.A_eta, evt.A_phi, evt.A_mass)
+                    dRAAcand, dRAnAcand = AGen.DeltaR(Acand), AGen.DeltaR(nAcand)
+                    htool.fill_hist(f"{input_path}/dRAAcand", dRAAcand, weight, 100, 0., 10.)
+                    htool.fill_hist(f"{input_path}/dRAnAcand", dRAnAcand, weight, 100, 0., 10.)
+            
+        #fake
         else:
             if (not evt.IsDATA) or (not syst == "Central"):
                 return
@@ -758,31 +747,29 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, w_fake, 100, 0., 10.)
             
             # variables with mass point dependence
-            for mass_point in MASS_POINTs:
-                input_path = f"fake/{mass_point}/{REGION}/Central"
-                score_fake, score_ttX = scores_fake[mass_point], scores_ttX[mass_point]
-                mA = float(mass_point.split("_")[1][2:])
+            input_path = f"fake/{MASS_POINT}/{REGION}/Central"
+            mA = float(MASS_POINT.split("_")[1][2:])
             
-                htool.fill_hist(f"{input_path}/score_fake", score_fake, w_fake, 100, 0., 1.)
-                htool.fill_hist(f"{input_path}/score_ttX", score_ttX, w_fake, 100, 0., 1.)
-                if REGION == "ZFake":
-                    # make Z candidate
-                    if abs(ospair1.Mass() - 91.2) < abs(ospair2.Mass() - 91.2):
-                        ZCand, nZCand = ospair1, ospair2
-                    else:
-                        ZCand, nZCand = ospair2, ospair1
-                    htool.fill_object(f"{input_path}/ZCand", ZCand, w_fake)
-                    htool.fill_object(f"{input_path}/nZCand", nZCand, w_fake)
-                elif REGION == "SR":
-                    # make A candidate
-                    if abs(ospair1.Mass() - mA) < abs(ospair2.Mass() - mA):
-                        Acand, nAcand = ospair1, ospair2
-                    else:
-                        Acand, nAcand = ospair2, ospair1
-                    htool.fill_object(f"{input_path}/Acand", Acand, w_fake)
-                    htool.fill_object(f"{input_path}/nAcand", nAcand, w_fake)
-                    htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, Acand.Mass(), w_fake,
-                                      100, 0., 1., 100, 0., 1., 3000, 0., 300.)
+            htool.fill_hist(f"{input_path}/score_fake", score_fake, w_fake, 100, 0., 1.)
+            htool.fill_hist(f"{input_path}/score_ttX", score_ttX, w_fake, 100, 0., 1.)
+            if REGION == "ZFake":
+                # make Z candidate
+                if abs(ospair1.Mass() - 91.2) < abs(ospair2.Mass() - 91.2):
+                    ZCand, nZCand = ospair1, ospair2
+                else:
+                    ZCand, nZCand = ospair2, ospair1
+                htool.fill_object(f"{input_path}/ZCand", ZCand, w_fake)
+                htool.fill_object(f"{input_path}/nZCand", nZCand, w_fake)
+            elif REGION == "SR":
+                # make A candidate
+                if abs(ospair1.Mass() - mA) < abs(ospair2.Mass() - mA):
+                    Acand, nAcand = ospair1, ospair2
+                else:
+                    Acand, nAcand = ospair2, ospair1
+                htool.fill_object(f"{input_path}/Acand", Acand, w_fake)
+                htool.fill_object(f"{input_path}/nAcand", nAcand, w_fake)
+                htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, Acand.Mass(), w_fake,
+                                    100, 0., 1., 100, 0., 1., 3000, 0., 300.)
                     
             # Up
             input_path = f"fake/objects/{REGION}/Up"
@@ -837,31 +824,29 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, w_fake_up, 100, 0., 10.)
             
             # variables with mass point dependence
-            for mass_point in MASS_POINTs:
-                input_path = f"fake/{mass_point}/{REGION}/Up"
-                score_fake, score_ttX = scores_fake[mass_point], scores_ttX[mass_point]
-                mA = float(mass_point.split("_")[1][2:])
+            input_path = f"fake/{MASS_POINT}/{REGION}/Up"
+            mA = float(MASS_POINT.split("_")[1][2:])
             
-                htool.fill_hist(f"{input_path}/score_fake", score_fake, w_fake_up, 100, 0., 1.)
-                htool.fill_hist(f"{input_path}/score_ttX", score_ttX, w_fake_up, 100, 0., 1.)
-                if REGION == "ZFake":
-                    # make Z candidate
-                    if abs(ospair1.Mass() - 91.2) < abs(ospair2.Mass() - 91.2):
-                        ZCand, nZCand = ospair1, ospair2
-                    else:
-                        ZCand, nZCand = ospair2, ospair1
-                    htool.fill_object(f"{input_path}/ZCand", ZCand, w_fake_up)
-                    htool.fill_object(f"{input_path}/nZCand", nZCand, w_fake_up)
-                elif REGION == "SR":
-                    # make A candidate
-                    if abs(ospair1.Mass() - mA) < abs(ospair2.Mass() - mA):
-                        Acand, nAcand = ospair1, ospair2
-                    else:
-                        Acand, nAcand = ospair2, ospair1
-                    htool.fill_object(f"{input_path}/Acand", Acand, w_fake_up)
-                    htool.fill_object(f"{input_path}/nAcand", nAcand, w_fake_up)
-                    htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, Acand.Mass(), w_fake_up,
-                                      100, 0., 1., 100, 0., 1., 3000, 0., 300.)                
+            htool.fill_hist(f"{input_path}/score_fake", score_fake, w_fake_up, 100, 0., 1.)
+            htool.fill_hist(f"{input_path}/score_ttX", score_ttX, w_fake_up, 100, 0., 1.)
+            if REGION == "ZFake":
+                # make Z candidate
+                if abs(ospair1.Mass() - 91.2) < abs(ospair2.Mass() - 91.2):
+                    ZCand, nZCand = ospair1, ospair2
+                else:
+                    ZCand, nZCand = ospair2, ospair1
+                htool.fill_object(f"{input_path}/ZCand", ZCand, w_fake_up)
+                htool.fill_object(f"{input_path}/nZCand", nZCand, w_fake_up)
+            elif REGION == "SR":
+                # make A candidate
+                if abs(ospair1.Mass() - mA) < abs(ospair2.Mass() - mA):
+                    Acand, nAcand = ospair1, ospair2
+                else:
+                    Acand, nAcand = ospair2, ospair1
+                htool.fill_object(f"{input_path}/Acand", Acand, w_fake_up)
+                htool.fill_object(f"{input_path}/nAcand", nAcand, w_fake_up)
+                htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, Acand.Mass(), w_fake_up,
+                                    100, 0., 1., 100, 0., 1., 3000, 0., 300.)                
 
             # Down
             input_path = f"fake/objects/{REGION}/Down"
@@ -916,31 +901,29 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, w_fake_down, 100, 0., 10.)
             
             # variables with mass point dependence
-            for mass_point in MASS_POINTs:
-                input_path = f"fake/{mass_point}/{REGION}/Down"
-                score_fake, score_ttX = scores_fake[mass_point], scores_ttX[mass_point]
-                mA = float(mass_point.split("_")[1][2:])
+            input_path = f"fake/{MASS_POINT}/{REGION}/Down"
+            mA = float(MASS_POINT.split("_")[1][2:])
             
-                htool.fill_hist(f"{input_path}/score_fake", score_fake, w_fake_down, 100, 0., 1.)
-                htool.fill_hist(f"{input_path}/score_ttX", score_ttX, w_fake_down, 100, 0., 1.)
-                if REGION == "ZFake":
-                    # make Z candidate
-                    if abs(ospair1.Mass() - 91.2) < abs(ospair2.Mass() - 91.2):
-                        ZCand, nZCand = ospair1, ospair2
-                    else:
-                        ZCand, nZCand = ospair2, ospair1
-                    htool.fill_object(f"{input_path}/ZCand", ZCand, w_fake_down)
-                    htool.fill_object(f"{input_path}/nZCand", nZCand, w_fake_down)
-                elif REGION == "SR":
-                    # make A candidate
-                    if abs(ospair1.Mass() - mA) < abs(ospair2.Mass() - mA):
-                        Acand, nAcand = ospair1, ospair2
-                    else:
-                        Acand, nAcand = ospair2, ospair1
-                    htool.fill_object(f"{input_path}/Acand", Acand, w_fake_down)
-                    htool.fill_object(f"{input_path}/nAcand", nAcand, w_fake_down)
-                    htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, Acand.Mass(), w_fake_down,
-                                      100, 0., 1., 100, 0., 1., 3000, 0., 300.) 
+            htool.fill_hist(f"{input_path}/score_fake", score_fake, w_fake_down, 100, 0., 1.)
+            htool.fill_hist(f"{input_path}/score_ttX", score_ttX, w_fake_down, 100, 0., 1.)
+            if REGION == "ZFake":
+                # make Z candidate
+                if abs(ospair1.Mass() - 91.2) < abs(ospair2.Mass() - 91.2):
+                    ZCand, nZCand = ospair1, ospair2
+                else:
+                    ZCand, nZCand = ospair2, ospair1
+                htool.fill_object(f"{input_path}/ZCand", ZCand, w_fake_down)
+                htool.fill_object(f"{input_path}/nZCand", nZCand, w_fake_down)
+            elif REGION == "SR":
+                # make A candidate
+                if abs(ospair1.Mass() - mA) < abs(ospair2.Mass() - mA):
+                    Acand, nAcand = ospair1, ospair2
+                else:
+                    Acand, nAcand = ospair2, ospair1
+                htool.fill_object(f"{input_path}/Acand", Acand, w_fake_down)
+                htool.fill_object(f"{input_path}/nAcand", nAcand, w_fake_down)
+                htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, Acand.Mass(), w_fake_down,
+                                    100, 0., 1., 100, 0., 1., 3000, 0., 300.)
 
 def main():
     print(f"Estimating {SAMPLE}...")
@@ -959,7 +942,7 @@ def main():
                 this_evt = (evt.run, evt.event, evt.lumi)
                 events[syst].append(this_evt)
 
-                loop(evt, clfs_fake, clfs_ttX, syst, htool)
+                loop(evt, clf_fake, clf_ttX, syst, htool)
         f.Close()
         f = TFile.Open(fkey_emu)
         for syst in SYSTs + WEIGHTSYSTs:
@@ -969,7 +952,7 @@ def main():
                 if this_evt in events[syst]:
                     continue
 
-                loop(evt, clfs_fake, clfs_ttX, syst, htool)
+                loop(evt, clf_fake, clf_ttX, syst, htool)
         f.Close()
 
     elif SAMPLE == "DATA" and CHANNEL == "3Mu":
@@ -977,7 +960,7 @@ def main():
         f = TFile.Open(fkey)
         for syst in SYSTs + WEIGHTSYSTs:
             for evt in f.Events:
-                loop(evt, clfs_fake, clfs_ttX, syst, htool)
+                loop(evt, clf_fake, clf_ttX, syst, htool)
         f.Close()
 
     elif SAMPLE in MCs or "TTToHcToWA" in SAMPLE:
@@ -985,13 +968,10 @@ def main():
         f = TFile.Open(fkey)
         for syst in SYSTs + WEIGHTSYSTs:
             for evt in f.Events:
-                loop(evt, clfs_fake, clfs_ttX, syst, htool)
+                loop(evt, clf_fake, clf_ttX, syst, htool)
         f.Close()
     else:
-        raise AttributeError
-
-    htool.save()
-
+        raise(AttributeError)
 
 if __name__ == "__main__":
     main()

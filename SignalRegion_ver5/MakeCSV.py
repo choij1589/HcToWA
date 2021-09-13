@@ -26,13 +26,13 @@ if CHANNEL == "1E2Mu":
     DATA = ["MuonEG", "DoubleMuon"]
     BKGs = ["rare", "ttX", "VV", "fake", "conv"]
     MCs = ["DY", "ZG", "rare", "ttX", "VV"]
-    SAMPLE_DIR = "/root/workspace/HcToWA/Samples/Selector/2017/Skim1E2Mu__/"
+    SAMPLE_DIR = "../Samples/Selector/2017/Skim1E2Mu__"
     # OUTFILE = f"/root/workspace/HcToWA/SignalRegion/Outputs/{CHANNEL}/{args.mass}/{SAMPLE}.root"
 elif CHANNEL == "3Mu":
     DATA = ["DoubleMuon"]
     BKGs = ["rake", "ttX", "VV", "fake"]
     MCs = ["DY", "ZG", "rare", "ttX", "VV"]
-    SAMPLE_DIR = "/root/workspace/HcToWA/Samples/Selector/2017/Skim3Mu__/"
+    SAMPLE_DIR = "../Samples/Selector/2017/Skim3Mu__"
     # OUTFILE = f"/root/workspace/HcToWA/SignalRegion/Outputs/{CHANNEL}/{args.mass}/{SAMPLE}.root"
 else:
     print(f"Wrong channel {CHANNEL}")
@@ -93,8 +93,8 @@ def loop(evt, syst, data):
     else:
         raise(AttributeError)
 
-    if not tight_flag:
-        return
+    #if (not tight_flag) and (SAMPLE != "fake"):
+    #    return
        
     prompt_flag = False
     muons_prompt, electrons_prompt = get_prompt_leptons(muons, electrons)
@@ -107,10 +107,17 @@ def loop(evt, syst, data):
     else:
         raise(AttributeError)
 
-    if SAMPLE in ["DY", "ZG"] and not prompt_flag:
-        return
-    if SAMPLE == "fake" and prompt_flag:
-        return
+    if SAMPLE == "fake":
+        if prompt_flag:
+            # further loosen ID criteria for fake
+            return
+    elif SAMPLE in ["DY", "ZG"]:
+        if not tight_flag and not prompt_flag:
+            return
+    else:
+        if not tight_flag:
+            return
+	
 
     # set weight
     weight = 1.
