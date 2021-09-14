@@ -12,7 +12,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 
-DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+DEVICE = 'cpu'
 print(f"using {DEVICE}")
 BATCH_SIZE = 2048
 EPOCHS = 300

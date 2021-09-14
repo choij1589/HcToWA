@@ -389,26 +389,27 @@ if __name__ == "__main__":
     print(f"INFO:: Saving CSV for 1D signal extraction")
 
     # 3d
-    mass_points = list()
-    fake_cuts = list()
-    ttX_cuts = list()
-    windows = list()
-    significances = list()
-    pool = mp.Pool(processes=4)
-    for mass_point in MASS_POINTs:
-        pool.apply_async(extract_signal_3d, (mass_point, ),
-                         callback=collect_results_3d)
-    pool.close()
-    pool.join()
+    extract_signal_3d("MHc70_MA15")
+    #mass_points = list()
+    #fake_cuts = list()
+    #ttX_cuts = list()
+    #windows = list()
+    #significances = list()
+    #pool = mp.Pool(processes=4)
+    #for mass_point in MASS_POINTs:
+    #    pool.apply_async(extract_signal_3d, (mass_point, ),
+    #                     callback=collect_results_3d)
+    #pool.close()
+    #pool.join()
 
-    collections = {
-        "mass_point": mass_points,
-        "fake_cut": fake_cuts,
-        "ttX_cut": ttX_cuts,
-        "window": windows,
-        "significance": significances
-    }
-    df = pd.DataFrame(collections)
-    df.to_csv(f"Outputs/{CHANNEL}/CSV/significance_3d.csv")
+    #collections = {
+    #    "mass_point": mass_points,
+    #    "fake_cut": fake_cuts,
+    #    "ttX_cut": ttX_cuts,
+    #    "window": windows,
+    #    "significance": significances
+    #}
+    #df = pd.DataFrame(collections)
+    #df.to_csv(f"Outputs/{CHANNEL}/CSV/significance_3d.csv")
     print(f"INFO:: Saving CSV for 3D signal extraction")
     print("END PROCESS")

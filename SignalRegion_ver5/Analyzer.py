@@ -17,6 +17,8 @@ from SignalTools import set_global
 from SignalTools import get_tight_leptons, get_prompt_leptons
 from SignalTools import get_weight, get_fake_weights
 
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--sample", "-s", default=None, required=True, type=str, help="sample name")
 parser.add_argument("--channel", "-c", default=None, required=True, type=str, help="channel")
@@ -31,7 +33,7 @@ set_global(CHANNEL, SAMPLE)
 
 # check output directory
 if not os.path.exists(f"Outputs/{CHANNEL}/{MASS_POINT}/ROOT"):
-	os.makedirs(f"Outputs/{CHANNEL}/{MASS_POINT}/ROOT")
+    os.makedirs(f"Outputs/{CHANNEL}/{MASS_POINT}/ROOT")
 
 if CHANNEL == "1E2Mu":
     DATA = ["MuonEG", "DoubleMuon"]
