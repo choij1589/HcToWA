@@ -38,16 +38,23 @@ parser.add_argument("--channel",
                     required=True,
                     type=str,
                     help='channel')
+parser.add_argument("--target",
+                    "-t",
+                    default=None,
+                    required=True,
+                    type=str,
+                    help="target process to discriminate")
 args = parser.parse_args()
 
 # global variables
 MASS_POINT = args.mass
 SIGNAL = f"TTToHcToWA_AToMuMu_{MASS_POINT}"
 CHANNEL = args.channel
+TARGET = args.target
 learning_rates = [
-    1e-4, 5e-4, 1e-3, 3e-3, 6e-3, 0.01, 0.02, 0.05, 0.08, 0.1, 0.2, 0.4
+    1e-4, 2e-4, 5e-4, 1e-3, 2e-3, 5e-3, 8e-3, 0.01, 0.02, 0.05, 0.08, 0.1, 0.2, 0.4, 0.6
 ]
-hidden_layers = [512, 256, 128]
+hidden_layers = [256, 128, 64]
 
 
 class DataManager:
@@ -98,11 +105,11 @@ class DataManager:
 
         train_loader = DataLoader(MyDataset(self.X_train, self.y_train),
                                   batch_size=BATCH_SIZE,
-                                  num_workers=4,
+                                  num_workers=1,
                                   shuffle=True)
         val_loader = DataLoader(MyDataset(self.X_val, self.y_val),
                                 batch_size=BATCH_SIZE,
-                                num_workers=4,
+                                num_workers=1,
                                 shuffle=False)
         test_loader = DataLoader(MyDataset(self.X_test, self.y_test),
                                  batch_size=BATCH_SIZE,
@@ -132,6 +139,16 @@ DY = pd.read_csv(f"Outputs/{CHANNEL}/CSV/DY.csv", index_col=0)
 ZG = pd.read_csv(f"Outputs/{CHANNEL}/CSV/ZG.csv", index_col=0)
 others = pd.concat([rare, VV, DY, ZG])
 
+if TARGET == "fake":
+    bkg = fake
+elif TARGET == "ttX":
+    bkg = ttX
+elif TARGET == "others":
+    bkg = others
+else:
+    print(f"wrong target {TARGET}")
+    raise(AttributeError)
+
 if CHANNEL == "1E2Mu":
     features = [
         'mu1_px', 'mu1_py', 'mu1_pz', 'mu1_mass', 'mu1_charge', 'mu2_px',
@@ -143,15 +160,24 @@ if CHANNEL == "1E2Mu":
         'avg_bscore'
     ]
 elif CHANNEL == "3Mu":
-    print("features for 3Mu are not defined yet")
-    raise (AttributeError)
+	features = [
+        'mu1_px', 'mu1_py', 'mu1_pz', 'mu1_mass', 'mu1_charge',
+        'mu2_px', 'mu2_py', 'mu2_pz', 'mu2_mass', 'mu2_charge',
+        'mu3_px', 'mu3_py', 'mu3_pz', 'mu3_mass', 'mu3_charge',
+        'j1_px', 'j1_py', 'j1_pz', 'j1_mass', 'j1_bscore',
+        'j2_px', 'j2_py', 'j2_pz', 'j2_mass', 'j2_bscore',
+        'dR_mu1mu2', 'dR_mu1mu3', 'dR_mu2mu3', 'dR_j1j2',
+        'dR_j1mu1', 'dR_j1mu2', 'dR_j1mu3',
+        'dR_j2mu1', 'dR_j2mu2', 'dR_j2mu3',
+        'HT', 'Nj', 'Nb', 'LT', 'MET',
+        'avg_dRjets', 'avg_bscore']
 else:
     print("wrong channel")
     raise (AttributeError)
 
-# signal vs fake
-manager = DataManager(signal, fake, features)
-print("training signal vs fake...")
+# now optimize processes
+manager = DataManager(signal, bkg, features)
+print(f"training signal vs {TARGET}")
 train_loader, val_loader, test_loader = manager.get_dataloaders()
 class_weights = manager.class_weights
 auc_max = 0.
@@ -210,126 +236,14 @@ for lr, n_hidden in product(learning_rates, hidden_layers):
     if auc > auc_max:
         auc_max = auc
 
-    # no need to save if train & test auc differs more than 3%
-    if (abs(auc_train - auc) / auc > 0.015) or auc_max != auc:
-        continue
-
-    # train / validation loss and accuracy
-    torch.save(
-        model.state_dict(),
-        f"Outputs/{CHANNEL}/{MASS_POINT}/models/chkpoint_sig_vs_fake.pt")
-    plt.figure(figsize=(24, 8))
-    plt.subplot(1, 2, 1)
-    plt.plot(epochs, history['loss'], label="train loss")
-    plt.plot(epochs, history['val_loss'], label="validation loss")
-    plt.xlabel("epoch")
-    plt.legend(loc='best')
-    plt.grid(True)
-
-    plt.subplot(1, 2, 2)
-    plt.plot(epochs, history['acc'], label="train accuracy")
-    plt.plot(epochs, history['val_acc'], label="validation accuracy")
-    plt.xlabel("epoch")
-    plt.legend(loc='best')
-    plt.grid(True)
-
-    plt.savefig(
-        f"Outputs/{CHANNEL}/{MASS_POINT}/figures/training_sig_vs_fake.png")
-
-    plt.figure(figsize=(14, 6))
-    ax1 = plt.subplot(1, 2, 1)
-    ax1.set_title(
-        f"Confusion Matrix\nlearning rate:{lr}\nhidden layers:{n_hidden}")
-    ax1 = sns.heatmap(cm,
-                      annot=True,
-                      fmt='d',
-                      square=False,
-                      xticklabels=['signal', 'background'],
-                      yticklabels=['signal', 'background'])
-    ax1.set_xlabel('Predicted')
-    ax1.set_ylabel('Actual')
-
-    ax2 = plt.subplot(1, 2, 2)
-    ax2.set_title(
-        f'ROC curve\nAUC(train):{round(auc_train, 3)}\nAUC(test):{round(auc, 3)}'
-    )
-    ax2.plot(tpr_train, 1 - fpr_train, 'r--', label='train roc')
-    ax2.plot(tpr, 1 - fpr, 'b--', label='test roc')
-    ax2.legend(loc='best')
-    ax2.set_xlabel('signal efficiency')
-    ax2.set_ylabel('background rejection')
-
-    plt.savefig(f"Outputs/{CHANNEL}/{MASS_POINT}/figures/roc_sig_vs_fake.png")
-
-# signal vs ttX
-manager = DataManager(signal, ttX, features)
-print("training signal vs ttX...")
-train_loader, val_loader, test_loader = manager.get_dataloaders()
-class_weights = manager.class_weights
-auc_max = 0.
-for lr, n_hidden in product(learning_rates, hidden_layers):
-    print(f"training with learning rate {lr}, hidden layers {n_hidden}")
-    model = SelfNormDNN(len(features), 2, n_hidden=n_hidden,
-                        batch_norm=False).to(DEVICE)
-    optimizer = optim.Adadelta(model.parameters(), lr=lr)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.5)
-    early_stopping = EarlyStopping(
-        patience=5,
-        path=
-        f"Outputs/{CHANNEL}/{MASS_POINT}/models/chkpoint_sig_vs_ttX_lr_{lr}_n_hidden_{n_hidden}.pt"
-    )
-
-    epochs = 0
-    history = dict()
-    history['loss'] = list()
-    history['acc'] = list()
-    history['val_loss'] = list()
-    history['val_acc'] = list()
-
-    for epoch in range(1, EPOCHS + 1):
-        loss, acc = train(model, train_loader, optimizer, class_weights, epoch)
-        scheduler.step()
-        test_loss, test_acc = evaluate(model, val_loader, class_weights, epoch)
-
-        history['loss'].append(loss)
-        history['acc'].append(acc)
-        history['val_loss'].append(test_loss)
-        history['val_acc'].append(test_acc)
-
-        early_stopping(test_loss, model)
-        epochs = epoch
-        if early_stopping.early_stop:
-            print(f"Early stopping in epoch {epoch}")
-            print(f"final training acc: {acc}, test acc: {test_acc}")
-            break
-    epochs = np.arange(1, epochs + 1)
-
-    X_train, X_test = manager.X_train, manager.X_test
-    y_train, y_test = manager.y_train, manager.y_test
-
-    pred_test = predict(model, X_test)
-    pred_prob_train = predict(model, X_train, prob=True)
-    pred_prob_test = predict(model, X_test, prob=True)
-    cm = metrics.confusion_matrix(y_test, pred_test)
-    fpr_train, tpr_train, thresh_train = metrics.roc_curve(y_train,
-                                                           pred_prob_train,
-                                                           pos_label=0)
-    fpr, tpr, thresh = metrics.roc_curve(y_test, pred_prob_test, pos_label=0)
-    auc_train = metrics.auc(fpr_train, tpr_train)
-    auc = metrics.auc(fpr, tpr)
-    print(f"train auc:{round(auc_train, 3)}, test auc:{round(auc, 3)}")
-    print(f"auc difference: {round((auc_train-auc)/auc_train*100, 2)}%\n")
-    if auc > auc_max:
-        auc_max = auc
-
     # no need to save if train & test auc differs more than 1.5%
-    if (abs(auc_train - auc) / auc > 0.015) or (auc_max != auc):
+    if (abs(auc_train - auc) / auc > 0.015):
         continue
 
     # train / validation loss and accuracy
     torch.save(
         model.state_dict(),
-        f"Outputs/{CHANNEL}/{MASS_POINT}/models/chkpoint_sig_vs_ttX.pt")
+        f"Outputs/{CHANNEL}/{MASS_POINT}/models/chkpoint_sig_vs_{TARGET}_lr-{lr}_hidden-{n_hidden}.pt")
     plt.figure(figsize=(24, 8))
     plt.subplot(1, 2, 1)
     plt.plot(epochs, history['loss'], label="train loss")
@@ -346,7 +260,7 @@ for lr, n_hidden in product(learning_rates, hidden_layers):
     plt.grid(True)
 
     plt.savefig(
-        f"Outputs/{CHANNEL}/{MASS_POINT}/figures/training_sig_vs_ttX.png")
+        f"Outputs/{CHANNEL}/{MASS_POINT}/figures/training_sig_vs_{TARGET}_lr-{lr}_hidden-{n_hidden}.png")
 
     plt.figure(figsize=(14, 6))
     ax1 = plt.subplot(1, 2, 1)
@@ -371,4 +285,4 @@ for lr, n_hidden in product(learning_rates, hidden_layers):
     ax2.set_xlabel('signal efficiency')
     ax2.set_ylabel('background rejection')
 
-    plt.savefig(f"Outputs/{CHANNEL}/{MASS_POINT}/figures/roc_sig_vs_ttX.png")
+    plt.savefig(f"Outputs/{CHANNEL}/{MASS_POINT}/figures/roc_sig_vs_{TARGET}_lr-{lr}_hidden-{n_hidden}.png")

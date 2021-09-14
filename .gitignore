@@ -3,3 +3,5 @@
 *.csv
 job.*
 *.jdl
+*.sub
+*/condor_base/*
