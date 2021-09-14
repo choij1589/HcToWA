@@ -1,3 +1,7 @@
+# train signal vs fake, signal vs ttX classifier
+# for every mass point
+# This script should be run in KNU server
+# to use multi-GPU support
 import warnings
 
 warnings.filterwarnings(action='ignore')
