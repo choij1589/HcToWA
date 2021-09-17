@@ -10,7 +10,7 @@ SYSTs = ["Central", "FakeUp", "FakeDown", "ElectronEnUp", "ElectronEnDown",
          "L1PrefireUp", "L1PrefireDown", "PUReweightUp", "PUReweightDown"]
 
 def get_hist(sample, histkey, channel, region, syst="Central"):
-    base = "/root/workspace/HcToWA/Conversion"
+    base = "/u/user/choij/scratch/HcToWA/Conversion"
     if sample == "fake":
         fkey = f"{base}/Outputs/{channel}/{region}/DATA.root"
     else:
