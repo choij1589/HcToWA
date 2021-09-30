@@ -1,5 +1,5 @@
 import argparse
-import multiprocessing as mp
+from math import sqrt, log
 import numpy as np
 import pandas as pd
 import ctypes as c
@@ -186,30 +186,45 @@ if __name__ == "__main__":
     bkgs = ['fake', 'ttX', 'conv', 'VV', 'rare']
     # perform 1d grid search first
     hists = get_hists(grid="1d")
-    windows = np.linspace(0., 5., 50) # 0.1 GeV step
+    windows = np.linspace(0.1, 5., 50) # 0.1 GeV step
     final_window = 0.
     final_metric = 0.
     for window in windows:
-        window = round(window, 1)
         Evt_dict = dict()
         for name, hist in hists.items():
             results = get_number_of_evts(name, hist, [window])
             update_results(results)
 
-        N_sig, dN_sig = Evt_dict['signal']
-        N_bkg_total, dN_bkg_total = 0., 0.
-        for bkg in bkgs:
-            N_bkg, dN_bkg = Evt_dict[bkg]
-            N_bkg_total += N_bkg
-            dN_bkg_total += dN_bkg
+        metrics = []
+        for _ in range(200):
+            N_sig = np.random.normal(Evt_dict['signal'][0], Evt_dict['signal'][1])
+            N_bkg = 0.
+            for bkg in bkgs:
+                N_bkg += np.random.normal(Evt_dict[bkg][0], Evt_dict[bkg][1])
+            try:
+                this_metric = sqrt(2*((N_sig+N_bkg)*log(1+N_sig/N_bkg) - N_sig))
+                metrics.append(this_metric)
+            except:
+                continue
+        metric = np.mean(metrics)
 
-        try:
-            metric = N_sig / np.sqrt(N_bkg_total + np.power(dN_bkg_total, 2))
-            if metric > final_metric:
-                final_metric = metric
-                final_window = window
-        except:
-            pass
+        #N_sig, dN_sig = Evt_dict['signal']
+        #N_bkg_total, dN_bkg_total = 0., 0.
+        #for bkg in bkgs:
+        #    N_bkg, dN_bkg = Evt_dict[bkg]
+        #    N_bkg_total += N_bkg
+        #    dN_bkg_total += dN_bkg
+
+
+        #try:
+        #    # metric = N_sig / np.sqrt(N_bkg_total + np.power(dN_bkg_total, 2))
+        #    metric = sqrt(2*((N_sig+N_bkg)*log(1+N_sig/N_bkg) - N_sig))
+        #except:
+        #    metric = 0.
+
+        if metric > final_metric:
+            final_metric = metric
+            final_window = window
     print(f"[1d grid search] current best cut: window = {final_window} with metric {final_metric}")
     
     # save results
@@ -218,91 +233,59 @@ if __name__ == "__main__":
         results = get_number_of_evts(name, hist, [final_window])
         update_results(results)
     Evt_dict["window"] = (final_window, 0)
+    Evt_dict["metric"] = (final_metric, 0)
     df = pd.DataFrame(Evt_dict)
-    df.to_csv("grid_1D.csv")
+    df.to_csv(f"Outputs/{CHANNEL}/CSV/Grid_{MASS_POINT}_exact_1D.csv")
     del hists, Evt_dict
 
     hists = get_hists(grid="3d")
     
     # first generation
-    f_space = np.linspace(0., 1., 10)
-    t_space = np.linspace(0., 1., 10)
-    m_space = np.linspace(0., 5., 10)
-    # mp.set_start_method("spawn")
-    first_generation = dict()
+    f_space = np.linspace(0., 0.99, 100)	# 0.01 step
+    t_space = np.linspace(0., 0.99, 100)	# 0.01 step
+    m_space = np.linspace(0.1, 5., 50)	# 0.1 GeV step
+    final_f_cut, final_t_cut, final_m_cut = 0., 0., 0.
+    final_metric = 0.
     for idx, (f_step, t_step, m_step) in enumerate(product(f_space, t_space, m_space)):
-        f_step = round(f_step, 1)
-        t_step = round(t_step, 1)
-        m_step = round(m_step, 1)
         cuts = [f_step, t_step, m_step]
-        # pool = mp.Pool(processes=5)
         Evt_dict = dict()
-        #get_number_of_evts("signal", hists["signal"], cuts)
         for name, hist in hists.items():
             results = get_number_of_evts(name, hist, cuts)
             update_results(results)
-            # pool.apply_async(get_number_of_evts, (name, hist, cuts,), callback=update_results)
-        # pool.close()
-        # pool.join()
 
-        N_sig, dN_sig = Evt_dict['signal']
-        N_bkg_total, dN_bkg_total = 0., 0.
-        for bkg in bkgs:
-            N_bkg, dN_bkg = Evt_dict[bkg]
-            N_bkg_total += N_bkg
-            dN_bkg_total += dN_bkg
-        try:
-            metric = N_sig / np.sqrt(N_bkg_total + np.power(dN_bkg_total, 2))
-            first_generation[idx] = (f_step, t_step, m_step, metric,)
-        except:
-            pass
- 
-    # sort w.r.t metric
-    res = sorted(first_generation.items(), key=(lambda x: x[1][3]), reverse=True)[:20]
-    del first_generation
-    best_cuts = res[0][1]
-    print(f"[1st generation] current best cut: (f_cut, t_cut, m_cut) = ({best_cuts[0]}, {best_cuts[1]}, {best_cuts[2]}) with metric {best_cuts[3]}")
-    
-    # second generation
-    final_metric = 0.
-    final_f_cut = 0.
-    final_t_cut = 0.
-    final_m_cut = 0.
-    for cuts in res:
-        f_cut, t_cut, m_cut, _ = cuts[1]
-        f_space = np.linspace(f_cut-0.05, f_cut+0.05, 10) # 0.01 step
-        t_space = np.linspace(t_cut-0.05, t_cut+0.05, 10) # 0.01 step
-        m_space = np.linspace(m_cut-0.2, m_cut+0.3, 5) # 0.1 step
-        
-        for f_step, t_step, m_step in product(f_space, t_space, m_space):
-            f_step = round(f_step, 2)
-            t_step = round(t_step, 2)
-            m_step = round(m_step, 1)
-            cuts = [f_step, t_step, m_step]
-            # pool = mp.Pool(processes=5)
-            Evt_dict = dict()
-            for name, hist in hists.items():
-                results = get_number_of_evts(name, hist, cuts)
-                update_results(results)
-                # pool.apply_async(get_number_of_evts, (name, hist, cuts,), callback=update_results)
-            # pool.close()
-            # pool.join()
-
-            N_sig, dN_sig = Evt_dict['signal']
-            N_bkg_total, dN_bkg_total = 0., 0.
+        metrics = []
+        for _ in range(200):
+            N_sig = np.random.normal(Evt_dict['signal'][0], Evt_dict['signal'][1])
+            N_bkg = 0.
             for bkg in bkgs:
-                N_bkg, dN_bkg = Evt_dict[bkg]
-                N_bkg_total += N_bkg
-                dN_bkg_total += dN_bkg
-            metric = N_sig / np.sqrt(N_bkg_total + np.power(dN_bkg_total, 2))
-            
-            # update cuts
-            if metric > final_metric:
-                final_metric = metric
-                final_f_cut = f_step
-                final_t_cut = t_step
-                final_m_cut = m_step
-    print(f"[2nd generation] final best cut: (f_cut, t_cut, m_cut) = ({final_f_cut}, {final_t_cut}, {final_m_cut}) with metric {final_metric}")
+                N_bkg += np.random.normal(Evt_dict[bkg][0], Evt_dict[bkg][1])
+            try:
+                this_metric = sqrt(2*((N_sig+N_bkg)*log(1+N_sig/N_bkg) - N_sig))
+                metrics.append(this_metric)
+            except:
+                continue
+        metric = np.mean(metrics)
+
+        #N_sig, dN_sig = Evt_dict['signal']
+        #N_bkg_total, dN_bkg_total = 0., 0.
+        #for bkg in bkgs:
+        #    N_bkg, dN_bkg = Evt_dict[bkg]
+        #    N_bkg_total += N_bkg
+        #    dN_bkg_total += dN_bkg
+        #try:
+        #    # metric = N_sig / np.sqrt(N_bkg_total + np.power(dN_bkg_total, 2))
+        #    metric = sqrt(2*((N_sig+N_bkg)*log(1+N_sig/N_bkg) - N_sig))
+        #except:
+        #    metric = 0.	# no bkg?
+
+        if metric > final_metric:
+            final_metric = metric
+            final_f_cut, final_t_cut, final_m_cut = f_step, t_step, m_step
+
+        if idx % 10000 == 0:
+            print(f"[3D grid search] progress: {idx/10000}/50")
+            print(f"[3D grid search] current best cut: (f_cut, t_cut, m_cut) = ({final_f_cut}, {final_t_cut}, {final_m_cut} with metric {final_metric}")
+    print(f"[3D grid search] final best cut: (f_cut, t_cut, m_cut) = ({final_f_cut}, {final_t_cut}, {final_m_cut}) with metric {final_metric}")
 
     # final iteration
     cuts = [final_f_cut, final_t_cut, final_m_cut]
@@ -317,5 +300,6 @@ if __name__ == "__main__":
     Evt_dict["f_cut"] = (final_f_cut, 0)
     Evt_dict["t_cut"] = (final_t_cut, 0)
     Evt_dict["m_cut"] = (final_m_cut, 0)
+    Evt_dict["metric"] = (final_metric, 0)
     df = pd.DataFrame(Evt_dict)
-    df.to_csv("grid_3D.csv")
+    df.to_csv(f"Outputs/{CHANNEL}/CSV/Grid_{MASS_POINT}_exact_3D.csv")
