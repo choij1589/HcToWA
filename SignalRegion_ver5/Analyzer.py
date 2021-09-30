@@ -213,7 +213,7 @@ def select(evt, muons, electrons, jets, bjets, METv):
         raise(AttributeError)
     
 # loop over events, fill histograms
-def loop(evt, clfs_fake, clfs_ttX, syst, htool):
+def loop(evt, syst, htool):
     muons, electrons = get_leptons(evt)
     leptons = muons + electrons
     jets, bjets = get_jets(evt)
@@ -370,7 +370,7 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             HT, Nj, Nb, LT, MET, avg_dRjets, avg_bscore
         ]])
     else:
-        raise (AttributeError)
+        raise (KeyError)
     
     score_fake = clf_fake(torch.FloatTensor(
         scaler_fake.transform(features))).view(2)[0].detach().numpy()
@@ -658,7 +658,7 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             htool.fill_hist(f"{input_path}/LT", LT, weight, 1000, 0., 1000.)
             htool.fill_hist(f"{input_path}/MET", MET, weight, 1000, 0., 1000.)
             htool.fill_hist(f"{input_path}/avg_dRjets", avg_dRjets, weight, 100, 0., 10.)
-            htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, weight, 100, 0., 10.)
+            htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, weight, 100, 0., 1.)
             
             # variables with mass point dependence
             input_path = f"{SAMPLE}/{MASS_POINT}/{REGION}/{syst}"
@@ -682,6 +682,7 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
                     Acand, nAcand = ospair2, ospair1
                 htool.fill_object(f"{input_path}/Acand", Acand, weight)
                 htool.fill_object(f"{input_path}/nAcand", nAcand, weight)
+                htool.fill_hist(f"{input_path}/mMM", Acand.Mass(), weight, 3000, 0., 300.)
                 htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, Acand.Mass(), weight,
                                     100, 0., 1., 100, 0., 1., 3000, 0., 300.)                    
                 # matching ACand in Signal Samples
@@ -746,7 +747,7 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             htool.fill_hist(f"{input_path}/LT", LT, w_fake, 1000, 0., 1000.)
             htool.fill_hist(f"{input_path}/MET", MET, w_fake, 1000, 0., 1000.)
             htool.fill_hist(f"{input_path}/avg_dRjets", avg_dRjets, w_fake, 100, 0., 10.)
-            htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, w_fake, 100, 0., 10.)
+            htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, w_fake, 100, 0., 1.)
             
             # variables with mass point dependence
             input_path = f"fake/{MASS_POINT}/{REGION}/Central"
@@ -770,6 +771,7 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
                     Acand, nAcand = ospair2, ospair1
                 htool.fill_object(f"{input_path}/Acand", Acand, w_fake)
                 htool.fill_object(f"{input_path}/nAcand", nAcand, w_fake)
+                htool.fill_hist(f"{input_path}/mMM", Acand.Mass(), w_fake, 3000, 0., 300.)
                 htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, Acand.Mass(), w_fake,
                                     100, 0., 1., 100, 0., 1., 3000, 0., 300.)
                     
@@ -823,7 +825,7 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             htool.fill_hist(f"{input_path}/LT", LT, w_fake_up, 1000, 0., 1000.)
             htool.fill_hist(f"{input_path}/MET", MET, w_fake_up, 1000, 0., 1000.)
             htool.fill_hist(f"{input_path}/avg_dRjets", avg_dRjets, w_fake_up, 100, 0., 10.)
-            htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, w_fake_up, 100, 0., 10.)
+            htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, w_fake_up, 100, 0., 1.)
             
             # variables with mass point dependence
             input_path = f"fake/{MASS_POINT}/{REGION}/Up"
@@ -847,6 +849,7 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
                     Acand, nAcand = ospair2, ospair1
                 htool.fill_object(f"{input_path}/Acand", Acand, w_fake_up)
                 htool.fill_object(f"{input_path}/nAcand", nAcand, w_fake_up)
+                htool.fill_hist(f"{input_path}/mMM", Acand.Mass(), w_fake_up, 3000, 0., 300.)
                 htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, Acand.Mass(), w_fake_up,
                                     100, 0., 1., 100, 0., 1., 3000, 0., 300.)                
 
@@ -900,7 +903,7 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
             htool.fill_hist(f"{input_path}/LT", LT, w_fake_down, 1000, 0., 1000.)
             htool.fill_hist(f"{input_path}/MET", MET, w_fake_down, 1000, 0., 1000.)
             htool.fill_hist(f"{input_path}/avg_dRjets", avg_dRjets, w_fake_down, 100, 0., 10.)
-            htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, w_fake_down, 100, 0., 10.)
+            htool.fill_hist(f"{input_path}/avg_bscore", avg_bscore, w_fake_down, 100, 0., 1.)
             
             # variables with mass point dependence
             input_path = f"fake/{MASS_POINT}/{REGION}/Down"
@@ -924,6 +927,7 @@ def loop(evt, clfs_fake, clfs_ttX, syst, htool):
                     Acand, nAcand = ospair2, ospair1
                 htool.fill_object(f"{input_path}/Acand", Acand, w_fake_down)
                 htool.fill_object(f"{input_path}/nAcand", nAcand, w_fake_down)
+                htool.fill_hist(f"{input_path}/mMM", Acand.Mass(), w_fake_down, 3000, 0., 300.)
                 htool.fill_hist3d(f"{input_path}/fake_ttX_mMM", score_fake, score_ttX, Acand.Mass(), w_fake_down,
                                     100, 0., 1., 100, 0., 1., 3000, 0., 300.)
 
@@ -944,7 +948,7 @@ def main():
                 this_evt = (evt.run, evt.event, evt.lumi)
                 events[syst].append(this_evt)
 
-                loop(evt, clf_fake, clf_ttX, syst, htool)
+                loop(evt, syst, htool)
         f.Close()
         f = TFile.Open(fkey_emu)
         for syst in SYSTs + WEIGHTSYSTs:
@@ -954,7 +958,7 @@ def main():
                 if this_evt in events[syst]:
                     continue
 
-                loop(evt, clf_fake, clf_ttX, syst, htool)
+                loop(evt, syst, htool)
         f.Close()
 
     elif SAMPLE == "DATA" and CHANNEL == "3Mu":
@@ -962,7 +966,7 @@ def main():
         f = TFile.Open(fkey)
         for syst in SYSTs + WEIGHTSYSTs:
             for evt in f.Events:
-                loop(evt, clf_fake, clf_ttX, syst, htool)
+                loop(evt, syst, htool)
         f.Close()
 
     elif SAMPLE in MCs or "TTToHcToWA" in SAMPLE:
@@ -970,10 +974,10 @@ def main():
         f = TFile.Open(fkey)
         for syst in SYSTs + WEIGHTSYSTs:
             for evt in f.Events:
-                loop(evt, clf_fake, clf_ttX, syst, htool)
+                loop(evt, syst, htool)
         f.Close()
     else:
-        raise(AttributeError)
+        raise(KeyError)
     htool.save()
 
 if __name__ == "__main__":

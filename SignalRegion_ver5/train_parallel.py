@@ -66,10 +66,7 @@ CHANNEL = args.channel
 TARGET = args.target
 
 # hyperparameters
-learning_rates = [
-    1e-4, 5e-4, 1e-3, 5e-3, 0.01, 0.03, 0.05, 0.08, 0.1, 0.2, 0.3, 0.4, 0.5,
-    0.6
-]
+learning_rates = [1e-4, 5e-4, 1e-3, 5e-3, 0.01, 0.03, 0.05, 0.08, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
 hidden_nodes = [64, 128, 192, 256]
 
 # reduce parameters for dry run

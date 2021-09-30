@@ -339,6 +339,6 @@ for obs in score_params.keys():
         plotter.combine()
         plotter.save(f"Outputs/1E2Mu/{mass_point}/TTFake/{histkey.replace('/', '_')}.png")
     except Exception as e:
-        print(f"Error occurre! TTFake-{obs}")
+        print(f"Error occurred! TTFake-{obs}")
         print(e)
 

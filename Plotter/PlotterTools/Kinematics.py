@@ -99,12 +99,13 @@ class Kinematics(PlotterBase):
             maximum = max(maximum, hist.GetMaximum())
         for hist in self.h_bkgs.values():
             maximum = max(maximum, hist.GetMaximum())
+        
         colors = [2, 4, 8, 3, 9]
         idx = 0
         for name, hist in self.h_sigs.items():
             hist.GetYaxis().SetTitle(self.hist_params['y_title'])
             hist.GetYaxis().SetTitleOffset(1.4)
-            hist.GetYaxis().SetRangeUser(0, maximum*1.6)
+            hist.GetYaxis().SetRangeUser(0, maximum*3)
             if self.logy:
                 hist.GetYaxis().SetRangeUser(1, maximum*30)
             hist.SetLineColor(colors[idx])
@@ -114,7 +115,7 @@ class Kinematics(PlotterBase):
         for name, hist in self.h_bkgs.items():
             hist.GetYaxis().SetTitle(self.hist_params['y_title'])
             hist.GetYaxis().SetTitleOffset(1.4)
-            hist.GetYaxis().SetRangeUser(0, maximum*1.6)
+            hist.GetYaxis().SetRangeUser(0, maximum*3)
             if self.logy:
                 hist.GetYaxis().SetRangeUser(1, maximum*30)
             self.legend.AddEntry(hist, name, 'f')

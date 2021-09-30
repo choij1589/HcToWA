@@ -43,31 +43,27 @@ class PlotterBase:
         self.extra_logo.SetTextFont(52)
 
     def set_canvas(self):
-        try:
-            if self.cvs_type == "default":
-                self.cvs = TCanvas("cvs", "", 680, 800)
-                if self.grid:
-                    self.cvs.SetGrid()
-                if self.logy:
-                    self.cvs.SetLogy()
-            elif self.cvs_type == "ratio":
-                self.cvs = TCanvas("cvs", "", 720, 800)
-                self.pad_up = TPad("pad_up", "", 0, 0.25, 1, 1)
-                self.pad_up.SetBottomMargin(0.02)
-                if self.grid:
-                    self.pad_up.SetGrid()
-                if self.logy:
-                    self.pad_up.SetLogy()
+        if self.cvs_type == "default":
+            self.cvs = TCanvas("cvs", "", 680, 800)
+            if self.grid:
+                self.cvs.SetGrid()
+            if self.logy:
+                self.cvs.SetLogy()
+        elif self.cvs_type == "ratio":
+            self.cvs = TCanvas("cvs", "", 720, 800)
+            self.pad_up = TPad("pad_up", "", 0, 0.25, 1, 1)
+            self.pad_up.SetBottomMargin(0.02)
+            if self.grid:
+                self.pad_up.SetGrid()
+            if self.logy:
+                self.pad_up.SetLogy()
 
-                self.pad_down = TPad("pad_down", "", 0, 0, 1, 0.25)
-                self.pad_down.SetGrid(1)
-                self.pad_down.SetTopMargin(0.08)
-                self.pad_down.SetBottomMargin(0.3)
-        except Exception as e:
-            print("__set_canvas(): Exception Occured! " + str(e))
-            # raise(AttributeError)
+            self.pad_down = TPad("pad_down", "", 0, 0, 1, 0.25)
+            self.pad_down.SetGrid(1)
+            self.pad_down.SetTopMargin(0.08)
+            self.pad_down.SetBottomMargin(0.3)
+    
     # methods
-
     def draw(self):
         self.cvs.Draw()
 
