@@ -1,0 +1,25 @@
+ <<< Combine >>> 
+Will use a-priori expected background instead of a-posteriori one.
+>>> method used is AsymptoticLimits
+>>> random number generator seed is 123456
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(model_s) evaluation error, 
+ origin       : RooProdPdf::model_s[ modelObs_s * nuisancePdf ]
+ message      : getLogVal() top-level p.d.f evaluates to zero
+ server values: !pdfs=(modelObs_s = 0/1,nuisancePdf = 1)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset_) evaluation error, 
+ origin       : RooNLLVar::nll_model_s__Asymptotic_asimovDataset_[ paramSet=(acceptance_VV,acceptance_conv,acceptance_fake,acceptance_rare,acceptance_ttX,r) ]
+ message      : function value is NAN
+ server values: paramSet=(acceptance_VV = 0.00209699 +/- 1.93282,acceptance_conv = -0.00710087 +/- 1.91402,acceptance_fake = -0.00601285 +/- 1.87694,acceptance_rare = 0.00027469 +/- 1.93444,acceptance_ttX = 0.000676616 +/- 1.93436,r = 10 +/- 13.6141)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(nll_model_s__Asymptotic_asimovDataset__with_constr) evaluation error, 
+ origin       : RooAddition::nll_model_s__Asymptotic_asimovDataset__with_constr[ nll_model_s__Asymptotic_asimovDataset_ + nll_model_s__Asymptotic_asimovDataset__constr ]
+ message      : function value is NAN
+ server values: !set=(nll_model_s__Asymptotic_asimovDataset_ = -nan,nll_model_s__Asymptotic_asimovDataset__constr = 4.59474)
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 0.1045
+Expected 16.0%: r < 0.1394
+Expected 50.0%: r < 0.1938
+Expected 84.0%: r < 0.2719
+Expected 97.5%: r < 0.3674
+
+Done in 0.00 min (cpu), 0.00 min (real)

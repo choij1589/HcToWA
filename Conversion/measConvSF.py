@@ -1,4 +1,4 @@
-import argparse
+import os, argparse
 import numpy as np
 from ROOT import TFile, TH1D
 
@@ -10,7 +10,7 @@ SYSTs = ["Central", "FakeUp", "FakeDown", "ElectronEnUp", "ElectronEnDown",
          "L1PrefireUp", "L1PrefireDown", "PUReweightUp", "PUReweightDown"]
 
 def get_hist(sample, histkey, channel, region, syst="Central"):
-    base = "/u/user/choij/scratch/HcToWA/Conversion"
+    base = f"{os.environ['WORKING_DIR']}/Conversion"
     if sample == "fake":
         fkey = f"{base}/Outputs/{channel}/{region}/DATA.root"
     else:
