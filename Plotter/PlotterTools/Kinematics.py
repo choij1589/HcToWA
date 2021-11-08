@@ -92,6 +92,7 @@ class Kinematics(PlotterBase):
                 hist.GetXaxis().SetTitleOffset(1.0)
                 hist.GetXaxis().SetLabelSize(0.04)
 
+ 68         for hist in self.h_bkgs.values():
         # y axis and style
         print("INFO: Automatically set y axis range")
         maximum = self.total.GetMaximum()
