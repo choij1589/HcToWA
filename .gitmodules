@@ -1,3 +1,6 @@
 [submodule "www"]
 	path = www
-	url = git@github.com:choij1589/www
+	url = git@github.com:choij1589/www.git
+[submodule "Plotter"]
+	path = Plotter
+	url = git@github.com:choij1589/Plotter.git
