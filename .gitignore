@@ -4,4 +4,4 @@
 job.*
 *.jdl
 *.sub
-*/condor_base/*
+*/__pycache__/*
