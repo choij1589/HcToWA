@@ -1,0 +1,7 @@
+Starts at Tue Mar 29 13:32:01 2022
+[tnp_tamsa] Use Configs["2016postVFP_MVANoIsoWP90"] from config/HcToWAElectron.py
+Fit ibin = 17
+Fit ibin = 37
+Warning: non-zero fit status 4
+Ends at  Tue Mar 29 13:32:14 2022
+Time took 13.3484051228 seconds.

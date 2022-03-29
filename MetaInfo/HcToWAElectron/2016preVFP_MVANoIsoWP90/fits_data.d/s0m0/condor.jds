@@ -1,0 +1,30 @@
+executable = /data6/Users/choij/EGammaTnP/results/HcToWAElectron/2016preVFP_MVANoIsoWP90/fits_data.d/s0m0/run.sh
+arguments = $(Process)
+output = /data6/Users/choij/EGammaTnP/results/HcToWAElectron/2016preVFP_MVANoIsoWP90/fits_data.d/s0m0/job$(Process).out
+error = /data6/Users/choij/EGammaTnP/results/HcToWAElectron/2016preVFP_MVANoIsoWP90/fits_data.d/s0m0/job$(Process).err
+log = /data6/Users/choij/EGammaTnP/results/HcToWAElectron/2016preVFP_MVANoIsoWP90/fits_data.d/s0m0/condor.log
+concurrency_limits = n300.choij
+jobbatchname = HcToWAElectron_2016preVFP_MVANoIsoWP90_fits_data_s0m0
+getenv = True
+queue arguments from (
+0,20,40
+1,21,41
+2,22,42
+3,23,43
+4,24,44
+5,25,45
+6,26,46
+7,27,47
+8,28,48
+9,29,49
+10,30
+11,31
+12,32
+13,33
+14,34
+15,35
+16,36
+17,37
+18,38
+19,39
+)

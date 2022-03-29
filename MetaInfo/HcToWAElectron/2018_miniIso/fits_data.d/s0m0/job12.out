@@ -1,0 +1,399 @@
+Starts at Mon Mar 28 20:29:53 2022
+[tnp_tamsa] Use Configs["2018_miniIso"] from config/HcToWAElectron.py
+Fit ibin = 12
+Fit ibin = 32
+Fit ibin = 52
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 79.5645)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 79.6613)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 79.7581)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 79.8548)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 79.9516)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 80.0484)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 80.1452)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 80.2419)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 80.3387)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 80.4355)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 80.5323)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 80.629)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 80.7258)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 80.8226)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 80.9194)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 81.0161)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 81.1129)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 81.2097)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 81.3065)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 81.4032)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 81.5)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 81.5968)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 81.6935)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 81.7903)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 81.8871)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 81.9839)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 82.0806)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 82.1774)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 82.2742)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 82.371)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 82.4677)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 89.5323)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 89.629)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 89.7258)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 89.8226)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 89.9194)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 90.0161)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 90.1129)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 90.2097)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 90.3065)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 90.4032)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 90.5)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 90.5968)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 90.6935)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 90.7903)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 90.8871)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 90.9839)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 91.0806)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 91.1774)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 91.2742)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 91.371)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 91.4677)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 91.5645)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 91.6613)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 91.7581)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 91.8548)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 91.9516)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 92.0484)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 92.1452)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 92.2419)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 92.3387)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 92.4355)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 92.5323)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 92.629)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 92.7258)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 92.8226)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 92.9194)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 93.0161)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 93.1129)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 93.2097)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 93.3065)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 93.4032)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 93.5)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 93.5968)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 93.6935)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 93.7903)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 93.8871)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 98.5323)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 98.629)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 98.7258)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 98.8226)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 98.9194)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 99.0161)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 99.1129)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 99.2097)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 99.3065)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 99.4032)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 99.5)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 99.5968)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 99.6935)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 99.7903)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 99.8871)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 99.9839)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 100.081)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 100.177)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 100.274)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 100.371)
+[#0] ERROR:Eval -- RooAbsReal::logEvalError(sigPhysFail) evaluation error, 
+ origin       : RooHistPdf::sigPhysFail[ pdfObs=(x) ]
+ message      : p.d.f normalization integral is zero or negative: 0
+ server values: pdfObs=(x = 100.468)
+Ends at  Mon Mar 28 20:30:05 2022
+Time took 12.0299048424 seconds.

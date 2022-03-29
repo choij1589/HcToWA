@@ -1,0 +1,9 @@
+Starts at Mon Mar 28 19:47:37 2022
+[tnp_tamsa] Use Configs["2016preVFP_HoverE"] from config/HcToWAElectron.py
+Fit ibin = 0
+Warning: non-zero fit status 4
+Fit ibin = 20
+Warning: non-zero fit status 4
+Fit ibin = 40
+Ends at  Mon Mar 28 19:47:53 2022
+Time took 16.2540459633 seconds.
