@@ -1,0 +1,8 @@
+Starts at Mon Mar 28 20:15:32 2022
+[tnp_tamsa] Use Configs["2017_missingHits"] from config/HcToWAElectron.py
+Fit ibin = 3
+Fit ibin = 23
+Warning: non-zero fit status 4
+Fit ibin = 43
+Ends at  Mon Mar 28 20:15:51 2022
+Time took 18.9221279621 seconds.

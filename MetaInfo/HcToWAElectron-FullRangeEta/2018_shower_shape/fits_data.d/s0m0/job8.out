@@ -1,0 +1,8 @@
+Starts at Mon Mar 28 20:21:08 2022
+[tnp_tamsa] Use Configs["2018_shower_shape"] from config/HcToWAElectron.py
+Fit ibin = 8
+Fit ibin = 28
+Warning: non-zero fit status 4
+Fit ibin = 48
+Ends at  Mon Mar 28 20:21:22 2022
+Time took 13.8528680801 seconds.

@@ -1,7 +1,6 @@
-Starts at Mon Mar 28 20:14:48 2022
+Starts at Wed Mar 30 12:50:30 2022
 [tnp_tamsa] Use Configs["2017_miniIso"] from config/HcToWAElectron.py
 Fit ibin = 7
 Fit ibin = 27
-Fit ibin = 47
-Ends at  Mon Mar 28 20:15:11 2022
-Time took 23.5398490429 seconds.
+Ends at  Wed Mar 30 12:50:40 2022
+Time took 9.63747906685 seconds.

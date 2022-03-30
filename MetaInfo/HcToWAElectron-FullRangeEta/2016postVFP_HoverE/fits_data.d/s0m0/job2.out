@@ -1,0 +1,7 @@
+Starts at Mon Mar 28 19:58:13 2022
+[tnp_tamsa] Use Configs["2016postVFP_HoverE"] from config/HcToWAElectron.py
+Fit ibin = 2
+Fit ibin = 22
+Fit ibin = 42
+Ends at  Mon Mar 28 19:58:26 2022
+Time took 12.7450740337 seconds.

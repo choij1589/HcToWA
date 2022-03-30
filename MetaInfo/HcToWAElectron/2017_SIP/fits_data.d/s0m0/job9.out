@@ -1,7 +1,6 @@
-Starts at Mon Mar 28 20:15:49 2022
+Starts at Wed Mar 30 12:49:25 2022
 [tnp_tamsa] Use Configs["2017_SIP"] from config/HcToWAElectron.py
 Fit ibin = 9
 Fit ibin = 29
-Fit ibin = 49
-Ends at  Mon Mar 28 20:15:57 2022
-Time took 7.44216585159 seconds.
+Ends at  Wed Mar 30 12:49:37 2022
+Time took 12.5216889381 seconds.

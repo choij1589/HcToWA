@@ -1,7 +1,7 @@
-Starts at Mon Mar 28 20:09:07 2022
+Starts at Wed Mar 30 12:44:18 2022
 [tnp_tamsa] Use Configs["2017_Iso"] from config/HcToWAElectron.py
 Fit ibin = 0
 Fit ibin = 20
-Fit ibin = 40
-Ends at  Mon Mar 28 20:09:30 2022
-Time took 22.9506061077 seconds.
+Warning: non-zero fit status 4
+Ends at  Wed Mar 30 12:44:34 2022
+Time took 16.5177469254 seconds.

@@ -1,0 +1,7 @@
+Starts at Mon Mar 28 20:15:06 2022
+[tnp_tamsa] Use Configs["2017_ConversionVeto"] from config/HcToWAElectron.py
+Fit ibin = 14
+Fit ibin = 34
+Fit ibin = 54
+Ends at  Mon Mar 28 20:15:20 2022
+Time took 14.7774879932 seconds.

@@ -1,0 +1,36 @@
+name = s0m0
+path = /data6/Users/choij/EGammaTnP/results/HcToWAElectron/2018_HoverE
+data = /gv0/Users/hsseo/EgammaTnP/2021-08-24/UL2018/data/EGamma
+sim = /gv0/Users/hsseo/EgammaTnP/2021-08-24/UL2018/mc/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8
+sim_weight = totWeight
+sim_genmatching = mcTrue
+sim_genmass = mcMass
+tree = tnpEleIDs/fitter_tree
+mass = pair_mass
+vars = ['el_sc_eta', 'el_pt']
+nbins = 60
+expr = (tag_Ele_pt > 35. && abs(tag_Ele_eta) < 2.17 && el_q*tag_Ele_q < 0 && (el_pt > 20. || tag_Ele_trigMVA > 0.92))
+test = passingMVA94Xwp90noisoV2 && ((el_sc_abseta < 1.479 && (el_5x5_sieie <= 0.013 && fabs(el_dEtaSeed) <= 0.01 && fabs(el_dPhiIn) <= 0.07 && el_hoe <= 0.13)) || (1.479 < el_sc_abseta && el_sc_abseta < 2.5 && (el_5x5_sieie <= 0.035 && fabs(el_dEtaSeed) <= 999. && fabs(el_dPhiIn) <= 999. && el_hoe <= 0.13)))
+data_hist_file = hists_data.root
+sim_hist_file = hists_sim.root
+hist_prefix = 
+hist_nbins = 90
+hist_range = (50, 140)
+method = fit
+data_fit_file = fits_data.root
+sim_fit_file = fits_sim.root
+fit_parameter = 
+  HistPdf::sigPhysPass(x,histPass_genmatching,2)
+  HistPdf::sigPhysFail(x,histFail_genmatching,2)
+  Gaussian::sigResPass(x,meanP[-0.0,-5.0,5.0],sigmaP[0.02,0.02,4.0])
+  Gaussian::sigResFail(x,meanF[-0.0,-5.0,5.0],sigmaF[0.02,0.02,4.0])
+  FCONV::sigPass(x, sigPhysPass , sigResPass)
+  FCONV::sigFail(x, sigPhysFail , sigResFail)
+  RooCMSShape::bkgPass(x,acmsP[60.,50.,80.],betaP[0.05,0.01,0.08],gammaP[0.1, 0, 1],peakP[90.0])
+  RooCMSShape::bkgFail(x,acmsF[60.,50.,80.],betaF[0.05,0.01,0.08],gammaF[0.1, 0, 1],peakF[90.0])
+fit_range = (60, 120)
+systematic = 
+option = 
+sim_maxweight = 10000.0
+title = stat
+vartitles = ['#eta_{SC}', 'p_{T} [GeV]']

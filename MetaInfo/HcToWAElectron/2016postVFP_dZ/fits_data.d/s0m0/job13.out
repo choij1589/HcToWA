@@ -1,7 +1,5 @@
-Starts at Mon Mar 28 20:04:18 2022
+Starts at Wed Mar 30 12:38:00 2022
 [tnp_tamsa] Use Configs["2016postVFP_dZ"] from config/HcToWAElectron.py
 Fit ibin = 13
-Fit ibin = 33
-Fit ibin = 53
-Ends at  Mon Mar 28 20:04:28 2022
-Time took 9.21360301971 seconds.
+Ends at  Wed Mar 30 12:38:06 2022
+Time took 5.85566210747 seconds.

@@ -1,8 +1,6 @@
-Starts at Mon Mar 28 20:21:26 2022
+Starts at Wed Mar 30 12:56:56 2022
 [tnp_tamsa] Use Configs["2018_seed"] from config/HcToWAElectron.py
 Fit ibin = 11
 Warning: non-zero fit status 4
-Fit ibin = 31
-Fit ibin = 51
-Ends at  Mon Mar 28 20:21:43 2022
-Time took 16.8848438263 seconds.
+Ends at  Wed Mar 30 12:57:12 2022
+Time took 15.500962019 seconds.

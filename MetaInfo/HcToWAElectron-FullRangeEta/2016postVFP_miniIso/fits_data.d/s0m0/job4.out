@@ -1,0 +1,8 @@
+Starts at Mon Mar 28 20:02:39 2022
+[tnp_tamsa] Use Configs["2016postVFP_miniIso"] from config/HcToWAElectron.py
+Fit ibin = 4
+Warning: non-zero fit status 4
+Fit ibin = 24
+Fit ibin = 44
+Ends at  Mon Mar 28 20:02:54 2022
+Time took 14.592592001 seconds.

@@ -1,0 +1,30 @@
+executable = /data6/Users/choij/EGammaTnP/results/HcToWAElectron/2017_HcToWATight/fits_data.d/s2m0/run.sh
+arguments = $(Process)
+output = /data6/Users/choij/EGammaTnP/results/HcToWAElectron/2017_HcToWATight/fits_data.d/s2m0/job$(Process).out
+error = /data6/Users/choij/EGammaTnP/results/HcToWAElectron/2017_HcToWATight/fits_data.d/s2m0/job$(Process).err
+log = /data6/Users/choij/EGammaTnP/results/HcToWAElectron/2017_HcToWATight/fits_data.d/s2m0/condor.log
+concurrency_limits = n300.choij
+jobbatchname = HcToWAElectron_2017_HcToWATight_fits_data_s2m0
+getenv = True
+queue arguments from (
+0,20
+1,21
+2,22
+3,23
+4,24
+5,25
+6,26
+7,27
+8,28
+9,29
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+)

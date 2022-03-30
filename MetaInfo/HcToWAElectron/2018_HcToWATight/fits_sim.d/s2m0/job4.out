@@ -1,0 +1,6 @@
+Starts at Wed Mar 30 13:42:32 2022
+[tnp_tamsa] Use Configs["2018_HcToWATight"] from config/HcToWAElectron.py
+Fit ibin = 4
+Fit ibin = 24
+Ends at  Wed Mar 30 13:42:44 2022
+Time took 11.7058918476 seconds.
