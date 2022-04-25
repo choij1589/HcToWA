@@ -1,0 +1,10 @@
+Starts at Thu Mar 31 15:18:11 2022
+[tnp_tamsa] Use Configs["2018_HcToWATight"] from config/HcToWAElectron.py
+Fit ibin = 8
+Warning: non-zero fit status 4
+Fit ibin = 28
+Warning: non-zero fit status 4
+Fit ibin = 48
+Warning: non-zero fit status 4
+Ends at  Thu Mar 31 15:18:30 2022
+Time took 19.0808191299 seconds.
