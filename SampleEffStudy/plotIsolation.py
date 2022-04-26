@@ -17,24 +17,28 @@ def get_histograms(era, signal, doTrkIso):
     if doTrkIso:
         h_prompt = f_sig.Get(f"3Mu/POGMedium+dZ+SIP+trkISO/PromptMuon/{ISO}")
         h_signal = f_sig.Get(f"3Mu/POGMedium+dZ+SIP+trkISO/SignalMuon/{ISO}")
+        h_offshell = f_sig.Get(f"3Mu/POGMedium+dZ+SIP+trkISO/OffshellMuon/{ISO}")
         h_bkg = f_bkg.Get(f"3Mu/POGMedium+dZ+SIP+trkISO/FakeMuon/{ISO}")
     else:
         h_prompt = f_sig.Get(f"3Mu/POGMedium+dZ+SIP/PromptMuon/{ISO}")
         h_signal = f_sig.Get(f"3Mu/POGMedium+dZ+SIP/SignalMuon/{ISO}")
+        h_offshell = f_sig.Get(f"3Mu/POGMedium+dZ+SIP/OffshellMuon/{ISO}")
         h_bkg = f_bkg.Get(f"3Mu/POGMedium+dZ+SIP/FakeMuon/{ISO}")
     h_prompt.SetDirectory(0)
     h_signal.SetDirectory(0)
+    h_offshell.SetDirectory(0)
     h_bkg.SetDirectory(0)
 
     f_sig.Close()
     f_bkg.Close()
 
-    return h_prompt, h_signal, h_bkg
+    return h_prompt, h_signal, h_offshell, h_bkg
 
 #### Calculate efficiency ####
 for era, sig in product(ERAs, SIGNALs):
-    h_prompt, h_sig, h_bkg = get_histograms(era, sig, doTrkIso)
+    h_prompt, h_sig, h_offshell, h_bkg = get_histograms(era, sig, doTrkIso)
     h_sig.Add(h_prompt)
+    h_sig.Add(h_offshell)
 
     h_eff_sig = TH1D("sig_eff", "", 100, 0., 1.)
     h_eff_bkg = TH1D("bkg_eff", "", 100, 0., 1.)
