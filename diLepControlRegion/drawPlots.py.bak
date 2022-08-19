@@ -1,0 +1,83 @@
+from math import pow, sqrt
+import argparse
+from ROOT import TFile
+from Plotter.plotter import Canvas
+from histConfigs import hist_configs
+
+# arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("--era", "-e", default=None, required=True, type=str, help="Era")
+parser.add_argument("--var", "-v", default=None, required=True, type=str, help="observable")
+parser.add_argument("--out", "-o", default=None, required=True, type=str, help="output png file name")
+args = parser.parse_args()
+
+ERA = args.era
+OBS = args.var
+OUT = args.out
+config = hist_configs[OBS]
+# get historgrams
+histkey_prefix = "dimuon_drellyan_candidate"
+
+simulations = ["DYJets", "TTLL_powheg", "SingleTop_sch_Lep", "SingleTop_tW_antitop_NoFullyHad", "SingleTop_tW_top_NoFullyHad", "WW_pythia", "WZ_pythia", "ZZ_pythia"]
+histkey = f"{histkey_prefix}/{OBS}"
+
+f_data = TFile.Open(f"SKFlatOutput/{ERA}/DATA/diLepControlRegion_DoubleMuon.root")
+h_data = f_data.Get(histkey); h_data.SetDirectory(0)
+f_data.Close()
+
+sim_coll = {}
+systematics = ["Central", "MuonIDSFUp", "MuonIDSFDown", "MuonTrigSFUp", "MuonTrigSFDown"]
+for sim in simulations:
+    central, *systs = systematics
+    f = TFile.Open(f"SKFlatOutput/{ERA}/diLepControlRegion_{sim}.root")
+    h_central = f.Get(f"{histkey_prefix}/{central}/{OBS}")
+    h_central.SetDirectory(0)
+    h_systs = []
+    for syst in systs:
+        h = f.Get(f"{histkey_prefix}/{syst}/{OBS}")
+        h.SetDirectory(0)
+        h_systs.append(h)
+    f.Close()
+    for bin in range(h_central.GetNcells()):
+        this_value, this_error = h_central.GetBinContent(bin), h_central.GetBinError(bin)
+        this_error = pow(this_error, 2)
+        for h in h_systs:
+            this_syst = h.GetBinContent(bin)
+            this_error += pow(this_value-this_syst, 2)
+        this_error = sqrt(this_error)
+        h_central.SetBinError(bin, this_error)
+    sim_coll[sim] = h_central
+
+#### Set histogram names
+histograms = {}
+# data
+h_data.SetName("data"); h_data.SetTitle("kBlack")
+# DY
+h_DY = sim_coll['DYJets'].Clone("DY"); h_DY.SetTitle("kGreen")
+# TT
+h_TT = sim_coll["TTLL_powheg"].Clone("TT"); h_TT.SetTitle("kBlue")
+# ST
+h_ST = sim_coll["SingleTop_sch_Lep"].Clone("ST");
+h_ST.Add(sim_coll["SingleTop_tW_top_NoFullyHad"])
+h_ST.Add(sim_coll["SingleTop_tW_antitop_NoFullyHad"])
+h_ST.SetTitle("kMagenta")
+# VV
+h_VV = sim_coll["WW_pythia"].Clone("VV");
+h_VV.Add(sim_coll["WZ_pythia"])
+h_VV.Add(sim_coll["ZZ_pythia"])
+h_VV.SetTitle("kRed")
+
+histograms["data"] = h_data
+histograms["DY"] = h_DY
+histograms["TT"] = h_TT
+histograms["ST"] = h_ST
+histograms["VV"] = h_VV
+
+# Draw plots
+c = Canvas()
+c.draw_distributions(histograms, config)
+c.draw_ratio(config)
+c.draw_legend(config)
+c.draw_latex(config)
+c.finalize()
+c.savefig(f"{OUT}")
